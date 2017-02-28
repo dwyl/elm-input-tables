@@ -2,8 +2,7 @@ module MainModel exposing (..)
 
 
 type alias Model =
-    { contentColumns : List Column
-    , inputColumns : List Column
+    { columns : List Column
     , rows : List Row
     , searchText : String
     , showVisibleColumnsUi : Bool
@@ -16,7 +15,14 @@ type alias Column =
     , filterText : String
     , options : ColumnsOptions
     , visible : Bool
+    , inputType : ColumnInput
     }
+
+
+type ColumnInput
+    = NoColumnInput
+    | TextColumnInput
+    | DropdownColumnInput
 
 
 type ColumnsOptions
@@ -26,8 +32,7 @@ type ColumnsOptions
 
 type alias Row =
     { id : Int
-    , contentCells : List ContentCell
-    , inputCells : List ContentCell
+    , cells : List ContentCell
     , checked : Bool
     }
 

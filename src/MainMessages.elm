@@ -2,13 +2,10 @@ module MainMessages exposing (..)
 
 
 type Msg
-    = UpdateContentCellValue Int String
-    | UpdateInputCellValue Int Int String
+    = UpdateCellValue Int Int String
     | UpdateSearchText String
-    | UpdateInputColumnFilterText Int String
-    | UpdateContentColumnFilterText Int String
+    | UpdateColumnFilterText Int String
     | ToggleRowCheckbox Int
     | ToggleAllRowsCheckboxes
     | ToggleChooseVisibleColumnsUi
-    | ToggleContentColumnVisibility Int
-    | ToggleInputColumnVisibility Int
+    | ToggleColumnVisibility Int

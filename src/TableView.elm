@@ -20,11 +20,10 @@ view model =
                 |> List.filter containsSearchText
 
         visibleColumns =
-            List.filter .visible (model.contentColumns ++ model.inputColumns)
+            List.filter .visible model.columns
 
         allColumnsPassFilter row =
-            row.contentCells
-                ++ row.inputCells
+            row.cells
                 |> List.map2 (,) visibleColumns
                 |> List.all columnPassesFilter
 
@@ -34,7 +33,7 @@ view model =
         containsSearchText row =
             let
                 cells =
-                    row.contentCells ++ row.inputCells
+                    row.cells
             in
                 contains model.searchText (toString row.id)
                     || (cells
@@ -57,21 +56,16 @@ view model =
                 [ thead []
                     (viewHeaders model)
                 , tbody []
-                    (List.map (viewTableRow model.contentColumns model.inputColumns) visibleRows)
+                    (List.map (viewTableRow model.columns) visibleRows)
                 ]
             ]
 
 
 viewChooseVisibleColumnButtons model =
     div [ hidden (not model.showVisibleColumnsUi) ]
-        ((List.map
-            (viewChooseVisibleColumnButton ToggleContentColumnVisibility)
-            model.contentColumns
-         )
-            ++ (List.map
-                    (viewChooseVisibleColumnButton ToggleInputColumnVisibility)
-                    model.inputColumns
-               )
+        (List.map
+            (viewChooseVisibleColumnButton ToggleColumnVisibility)
+            model.columns
         )
 
 
@@ -80,7 +74,7 @@ viewChooseVisibleColumnButton message column =
 
 
 viewHeaders model =
-    [ tr [] ((checkboxHeader model) :: (viewContentHeaders model) ++ (viewInputHeaders model)) ]
+    [ tr [] ((checkboxHeader model) :: (viewOtherHeaders model)) ]
 
 
 checkboxHeader model =
@@ -92,12 +86,12 @@ checkbox message checkedVal =
     input [ type_ "checkbox", checked checkedVal, onClick message ] []
 
 
-viewContentHeaders model =
-    List.filterMap viewContentHeader model.contentColumns
+viewOtherHeaders model =
+    List.filterMap viewHeader model.columns
 
 
-viewContentHeader : Column -> Maybe (Html Msg)
-viewContentHeader column =
+viewHeader : Column -> Maybe (Html Msg)
+viewHeader column =
     if column.visible then
         Just
             (th []
@@ -105,7 +99,7 @@ viewContentHeader column =
                 , input
                     [ placeholder "Filter"
                     , value column.filterText
-                    , onInput (UpdateContentColumnFilterText column.id)
+                    , onInput (UpdateColumnFilterText column.id)
                     ]
                     []
                 ]
@@ -127,7 +121,7 @@ viewInputHeader column =
                 , input
                     [ placeholder "Filter"
                     , value column.filterText
-                    , onInput (UpdateInputColumnFilterText column.id)
+                    , onInput (UpdateColumnFilterText column.id)
                     ]
                     []
                 ]
@@ -136,9 +130,9 @@ viewInputHeader column =
         Nothing
 
 
-viewTableRow : List Column -> List Column -> Row -> Html Msg
-viewTableRow contentColumns inputColumns row =
-    tr [] ((checkboxCell row) :: (viewContentCells contentColumns row) ++ (viewInputCells inputColumns row))
+viewTableRow : List Column -> Row -> Html Msg
+viewTableRow columns row =
+    tr [] ((checkboxCell row) :: (viewContentCells columns row))
 
 
 checkboxCell row =
@@ -148,8 +142,8 @@ checkboxCell row =
         ]
 
 
-viewContentCells contentColumns row =
-    List.map2 viewContentCell contentColumns row.contentCells
+viewContentCells columns row =
+    List.map2 viewContentCell columns row.cells
 
 
 viewContentCell : Column -> ContentCell -> Html msg
@@ -174,7 +168,7 @@ viewInputCell rowId inputColumn cell =
                 NoOptions ->
                     td []
                         [ input
-                            [ onInput (UpdateInputCellValue rowId cell.id)
+                            [ onInput (UpdateCellValue rowId cell.id)
                             , value cell.value
                             ]
                             []
@@ -182,7 +176,7 @@ viewInputCell rowId inputColumn cell =
 
                 OptionsList options ->
                     td []
-                        [ select [ onInput (UpdateInputCellValue rowId cell.id) ]
+                        [ select [ onInput (UpdateCellValue rowId cell.id) ]
                             (List.map viewOption options)
                         ]
     else

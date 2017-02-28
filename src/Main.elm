@@ -9,15 +9,13 @@ import MainView
 
 initialModel : Model
 initialModel =
-    { contentColumns =
-        [ Column 1 "content col 1 name" "" NoOptions True
-        , Column 2 "content col 2 name" "" NoOptions True
-        , Column 3 "content col 3 name" "" NoOptions True
-        ]
-    , inputColumns =
-        [ Column 1 "input col 1 name" "" NoOptions True
-        , Column 2 "input col 2 name" "" (OptionsList [ "The Doors", "Nina Simone", "Curtis Reading" ]) True
-        , Column 3 "input col 3 name" "" (OptionsList [ "bonobos", "chimps", "orangutans" ]) True
+    { columns =
+        [ Column 1 "content col 1 name" "" NoOptions True NoColumnInput
+        , Column 2 "content col 2 name" "" NoOptions True NoColumnInput
+        , Column 3 "content col 3 name" "" NoOptions True NoColumnInput
+        , Column 4 "input col 1 name" "" NoOptions True TextColumnInput
+        , Column 5 "input col 2 name" "" (OptionsList [ "The Doors", "Nina Simone", "Curtis Reading" ]) True DropdownColumnInput
+        , Column 6 "input col 3 name" "" (OptionsList [ "bonobos", "chimps", "orangutans" ]) True DropdownColumnInput
         ]
     , rows = initialRows
     , searchText = ""
@@ -31,15 +29,13 @@ initialRows =
 
 row1 =
     { id = 1
-    , contentCells =
+    , cells =
         [ ContentCell 1 "cel val 1"
         , ContentCell 2 "cel val 2"
         , ContentCell 3 "cel val 3"
-        ]
-    , inputCells =
-        [ ContentCell 1 "cel val 1"
-        , ContentCell 2 "cel val 2"
-        , ContentCell 3 "cel val 3"
+        , ContentCell 4 "cel val 1"
+        , ContentCell 5 "cel val 2"
+        , ContentCell 6 "cel val 3"
         ]
     , checked = False
     }
@@ -47,15 +43,13 @@ row1 =
 
 row2 =
     { id = 2
-    , contentCells =
+    , cells =
         [ ContentCell 1 "cel val 4"
         , ContentCell 2 "cel val 5"
         , ContentCell 3 "cel val 6"
-        ]
-    , inputCells =
-        [ ContentCell 1 "cel val 1"
-        , ContentCell 2 "cel val 2"
-        , ContentCell 3 "cel val 3"
+        , ContentCell 4 "cel val 1"
+        , ContentCell 5 "cel val 2"
+        , ContentCell 6 "cel val 3"
         ]
     , checked = False
     }

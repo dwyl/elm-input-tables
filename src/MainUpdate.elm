@@ -8,27 +8,16 @@ import List.Extra exposing (updateIf)
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        UpdateContentCellValue id value ->
-            ( model, Cmd.none )
-
-        UpdateInputCellValue rowId cellId value ->
+        UpdateCellValue rowId cellId value ->
             ( (updateInputCellValue model rowId cellId value), Cmd.none )
 
         UpdateSearchText value ->
             ( { model | searchText = value }, Cmd.none )
 
-        UpdateInputColumnFilterText columnId value ->
+        UpdateColumnFilterText columnId value ->
             ( { model
-                | inputColumns =
-                    updateFilterText columnId value model.inputColumns
-              }
-            , Cmd.none
-            )
-
-        UpdateContentColumnFilterText columnId value ->
-            ( { model
-                | contentColumns =
-                    updateFilterText columnId value model.contentColumns
+                | columns =
+                    updateFilterText columnId value model.columns
               }
             , Cmd.none
             )
@@ -54,18 +43,10 @@ update msg model =
         ToggleChooseVisibleColumnsUi ->
             ( { model | showVisibleColumnsUi = not model.showVisibleColumnsUi }, Cmd.none )
 
-        ToggleContentColumnVisibility columndId ->
+        ToggleColumnVisibility columndId ->
             ( { model
-                | contentColumns =
-                    updateIfHasId columndId (\r -> { r | visible = not r.visible }) model.contentColumns
-              }
-            , Cmd.none
-            )
-
-        ToggleInputColumnVisibility columndId ->
-            ( { model
-                | inputColumns =
-                    updateIfHasId columndId (\r -> { r | visible = not r.visible }) model.inputColumns
+                | columns =
+                    updateIfHasId columndId (\r -> { r | visible = not r.visible }) model.columns
               }
             , Cmd.none
             )
@@ -79,8 +60,8 @@ updateInputCellValue model rowId cellId value =
 
         updateRow row =
             { row
-                | inputCells =
-                    (updateIfHasId cellId) (\c -> { c | value = value }) row.inputCells
+                | cells =
+                    (updateIfHasId cellId) (\c -> { c | value = value }) row.cells
             }
     in
         { model | rows = updatedRows }
