@@ -1,23 +1,27 @@
 module Main exposing (..)
 
 import Html
+import MainMessages exposing (..)
 import MainModel exposing (..)
+import MainUpdate
 import MainView
 
 
 initialModel : Model
 initialModel =
     { contentColumns =
-        [ ContentColumn 1 "col 1 name"
-        , ContentColumn 2 "col 2 name"
-        , ContentColumn 3 "col 3 name"
+        [ Column 1 "content col 1 name" "" NoOptions True
+        , Column 2 "content col 2 name" "" NoOptions True
+        , Column 3 "content col 3 name" "" NoOptions True
         ]
     , inputColumns =
-        [ InputColumn 1 "col 1 name" NoOptions
-        , InputColumn 2 "col 2 name" (OptionsList [ "The Doors", "Nina Simone", "Curtis Reading" ])
-        , InputColumn 3 "col 3 name" (OptionsList [ "bonobos", "chimps", "orangutans" ])
+        [ Column 1 "input col 1 name" "" NoOptions True
+        , Column 2 "input col 2 name" "" (OptionsList [ "The Doors", "Nina Simone", "Curtis Reading" ]) True
+        , Column 3 "input col 3 name" "" (OptionsList [ "bonobos", "chimps", "orangutans" ]) True
         ]
     , rows = initialRows
+    , searchText = ""
+    , showVisibleColumnsUi = True
     }
 
 
@@ -37,6 +41,7 @@ row1 =
         , ContentCell 2 "cel val 2"
         , ContentCell 3 "cel val 3"
         ]
+    , checked = False
     }
 
 
@@ -52,6 +57,7 @@ row2 =
         , ContentCell 2 "cel val 2"
         , ContentCell 3 "cel val 3"
         ]
+    , checked = False
     }
 
 
@@ -62,14 +68,6 @@ init =
 
 
 -- MESSAGES
-
-
-type Msg
-    = Increment
-    | Decrement
-
-
-
 -- VIEW
 
 
@@ -82,9 +80,8 @@ view model =
 -- UPDATE
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    ( model, Cmd.none )
+update =
+    MainUpdate.update
 
 
 
