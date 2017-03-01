@@ -1,7 +1,7 @@
 module MainView exposing (view)
 
-import TableView
+import Table.View
 
 
 view =
-    TableView.view
+    Table.View.view

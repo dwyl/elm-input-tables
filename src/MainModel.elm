@@ -6,7 +6,14 @@ type alias Model =
     , rows : List Row
     , searchText : String
     , showVisibleColumnsUi : Bool
+    , sorting : Sorting
     }
+
+
+type Sorting
+    = NoSorting
+    | Asc Int
+    | Desc Int
 
 
 type alias Column =

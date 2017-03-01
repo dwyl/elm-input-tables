@@ -20,11 +20,36 @@ initialModel =
     , rows = initialRows
     , searchText = ""
     , showVisibleColumnsUi = True
+    , sorting = NoSorting
     }
 
 
 initialRows =
-    [ row1, row2 ]
+    List.range 1 100
+        |> List.map makeRow
+
+
+makeRow id =
+    { id = id
+    , data =
+        { title = "title " ++ (toString id)
+        , author = makeAuthor id
+        , reviewCount = "reviewCount " ++ (toString id)
+        , notes = "notes " ++ (toString id)
+        , category = "category " ++ (toString id)
+        , decision = "decision " ++ (toString id)
+        }
+    , checked = False
+    }
+
+
+makeAuthor id =
+    if id % 3 == 0 then
+        "Rory Campbell"
+    else if id % 3 == 1 then
+        "Conor Campbell"
+    else
+        "Naaz Ahmed"
 
 
 row1 =

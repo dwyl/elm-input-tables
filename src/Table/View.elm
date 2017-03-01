@@ -1,11 +1,11 @@
-module TableView exposing (view)
+module Table.View exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (checked, class, hidden, placeholder, selected, type_, value)
 import Html.Events exposing (onClick, onInput)
-import String exposing (contains, toLower)
 import MainMessages exposing (..)
 import MainModel exposing (..)
+import Table.RowFilter as RowFilter
 
 
 -- add tests for filtering
@@ -14,20 +14,11 @@ import MainModel exposing (..)
 view : Model -> Html Msg
 view model =
     let
-        visibleRows =
-            model.rows
-                |> List.filter allColumnsPassFilter
-
-        -- |> List.filter containsSearchText
         visibleColumns =
             List.filter .visible model.columns
 
-        allColumnsPassFilter row =
-            List.all (columnPassesFilter row) visibleColumns
-
-        columnPassesFilter row column =
-            contains column.filterText (column.getVal row.data)
-                && contains model.searchText (column.getVal row.data)
+        visibleRows =
+            RowFilter.filter model.rows visibleColumns model.searchText
     in
         div [ class "container" ]
             [ input
@@ -75,23 +66,44 @@ checkbox message checkedVal =
 
 
 viewOtherHeaders model =
-    List.filterMap viewHeader model.columns
+    List.filterMap (viewHeader model.sorting) model.columns
 
 
-viewHeader : Column -> Maybe (Html Msg)
-viewHeader column =
+viewHeader : Sorting -> Column -> Maybe (Html Msg)
+viewHeader sorting column =
     if column.visible then
-        Just
-            (th []
-                [ div [] [ text column.name ]
-                , input
-                    [ placeholder "Filter"
-                    , value column.filterText
-                    , onInput (UpdateColumnFilterText column.id)
+        let
+            sortingText =
+                case sorting of
+                    NoSorting ->
+                        "-"
+
+                    Asc id ->
+                        if id == column.id then
+                            "Asc"
+                        else
+                            "-"
+
+                    Desc id ->
+                        if id == column.id then
+                            "Desc"
+                        else
+                            "-"
+        in
+            Just
+                (th []
+                    [ div []
+                        [ span [] [ text column.name ]
+                        , button [ onClick (SortRows column) ] [ text sortingText ]
+                        ]
+                    , input
+                        [ placeholder "Filter"
+                        , value column.filterText
+                        , onInput (UpdateColumnFilterText column.id)
+                        ]
+                        []
                     ]
-                    []
-                ]
-            )
+                )
     else
         Nothing
 

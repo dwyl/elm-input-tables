@@ -11,3 +11,4 @@ type Msg
     | ToggleAllRowsCheckboxes
     | ToggleChooseVisibleColumnsUi
     | ToggleColumnVisibility Int
+    | SortRows Column
