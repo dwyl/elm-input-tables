@@ -137,29 +137,33 @@ viewCells columns row =
 viewCell : Row -> Column -> Maybe (Html Msg)
 viewCell row column =
     if column.visible then
-        Just
-            (case column.inputType of
-                NoColumnInput ->
-                    td [] [ text (column.getVal row.data) ]
+        let
+            val =
+                column.getVal row.data
+        in
+            Just
+                (case column.input of
+                    NoColumnInput ->
+                        td [] [ text (column.getVal row.data) ]
 
-                TextColumnInput ->
-                    td []
-                        [ input
-                            [ onInput (UpdateCellValue row.id row.id)
-                            , value (column.getVal row.data)
-                            ]
-                            []
-                        ]
-
-                DropdownColumnInput options ->
-                    let
-                        viewOption val =
-                            option [ selected (val == (column.getVal row.data)) ] [ text val ]
-                    in
+                    TextColumnInput setter ->
                         td []
-                            [ select [ onInput (UpdateCellValue row.id row.id) ]
-                                (List.map viewOption options)
+                            [ input
+                                [ onInput (UpdateCellValue setter row.id)
+                                , value val
+                                ]
+                                []
                             ]
-            )
+
+                    DropdownColumnInput setter options ->
+                        let
+                            viewOption optionsValue =
+                                option [ selected (optionsValue == val) ] [ text optionsValue ]
+                        in
+                            td []
+                                [ select [ onInput (UpdateCellValue setter row.id) ]
+                                    (List.map viewOption options)
+                                ]
+                )
     else
         Nothing

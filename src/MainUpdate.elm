@@ -8,10 +8,9 @@ import List.Extra exposing (updateIf)
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        UpdateCellValue rowId cellId value ->
-            ( model, Cmd.none )
+        UpdateCellValue setter rowId value ->
+            ( { model | rows = setCellData model.rows setter rowId value }, Cmd.none )
 
-        -- ( (updateInputCellValue model rowId cellId value), Cmd.none )
         UpdateSearchText value ->
             ( { model | searchText = value }, Cmd.none )
 
@@ -53,20 +52,13 @@ update msg model =
             )
 
 
-
--- updateInputCellValue : Model -> Int -> Int -> String -> Model
--- updateInputCellValue model rowId cellId value =
---     let
---         updatedRows =
---             (updateIfHasId rowId) updateRow model.rows
---
---         updateRow row =
---             { row
---                 | rowData =
---                     (updateIfHasId cellId) (\c -> { c | value = value }) row.rowData
---             }
---     in
---         { model | rows = updatedRows }
+setCellData : List Row -> (RowData -> a -> RowData) -> Int -> a -> List Row
+setCellData rows setter rowId value =
+    let
+        update row =
+            { row | data = setter row.data value }
+    in
+        updateIfHasId rowId update rows
 
 
 updateFilterText columnId value columns =

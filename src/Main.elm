@@ -13,9 +13,9 @@ initialModel =
         [ Column 1 "title" .title "" True NoColumnInput
         , Column 2 "author" .author "" True NoColumnInput
         , Column 3 "Review Count" .reviewCount "" True NoColumnInput
-        , Column 4 "notes" .notes "" True TextColumnInput
-        , Column 5 "category" .category "" True (DropdownColumnInput [ "The Doors", "Nina Simone", "Curtis Reading" ])
-        , Column 6 "decision" .decision "" True (DropdownColumnInput [ "bonobos", "chimps", "orangutans" ])
+        , Column 4 "notes" .notes "" True (TextColumnInput (\d v -> { d | notes = v }))
+        , Column 5 "category" .category "" True (DropdownColumnInput (\d v -> { d | category = v }) [ "The Doors", "Nina Simone", "Curtis Reading" ])
+        , Column 6 "decision" .decision "" True (DropdownColumnInput (\d v -> { d | decision = v }) [ "bonobos", "chimps", "orangutans" ])
         ]
     , rows = initialRows
     , searchText = ""

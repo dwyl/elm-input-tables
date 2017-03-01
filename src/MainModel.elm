@@ -15,14 +15,14 @@ type alias Column =
     , getVal : RowData -> String
     , filterText : String
     , visible : Bool
-    , inputType : ColumnInput
+    , input : ColumnInput
     }
 
 
 type ColumnInput
     = NoColumnInput
-    | TextColumnInput
-    | DropdownColumnInput (List String)
+    | TextColumnInput (RowData -> String -> RowData)
+    | DropdownColumnInput (RowData -> String -> RowData) (List String)
 
 
 type alias Row =
