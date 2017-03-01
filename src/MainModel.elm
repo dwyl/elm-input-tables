@@ -12,8 +12,8 @@ type alias Model =
 type alias Column =
     { id : Int
     , name : String
+    , getVal : RowData -> String
     , filterText : String
-    , options : ColumnsOptions
     , visible : Bool
     , inputType : ColumnInput
     }
@@ -22,18 +22,23 @@ type alias Column =
 type ColumnInput
     = NoColumnInput
     | TextColumnInput
-    | DropdownColumnInput
-
-
-type ColumnsOptions
-    = NoOptions
-    | OptionsList (List String)
+    | DropdownColumnInput (List String)
 
 
 type alias Row =
     { id : Int
-    , cells : List ContentCell
+    , data : RowData
     , checked : Bool
+    }
+
+
+type alias RowData =
+    { title : String
+    , author : String
+    , reviewCount : String
+    , notes : String
+    , category : String
+    , decision : String
     }
 
 

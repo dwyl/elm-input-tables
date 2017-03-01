@@ -17,29 +17,17 @@ view model =
         visibleRows =
             model.rows
                 |> List.filter allColumnsPassFilter
-                |> List.filter containsSearchText
 
+        -- |> List.filter containsSearchText
         visibleColumns =
             List.filter .visible model.columns
 
         allColumnsPassFilter row =
-            row.cells
-                |> List.map2 (,) visibleColumns
-                |> List.all columnPassesFilter
+            List.all (columnPassesFilter row) visibleColumns
 
-        columnPassesFilter ( column, cell ) =
-            contains column.filterText cell.value
-
-        containsSearchText row =
-            let
-                cells =
-                    row.cells
-            in
-                contains model.searchText (toString row.id)
-                    || (cells
-                            |> List.map .value
-                            |> List.any (contains model.searchText)
-                       )
+        columnPassesFilter row column =
+            contains column.filterText (column.getVal row.data)
+                && contains model.searchText (column.getVal row.data)
     in
         div [ class "container" ]
             [ input
@@ -132,7 +120,7 @@ viewInputHeader column =
 
 viewTableRow : List Column -> Row -> Html Msg
 viewTableRow columns row =
-    tr [] ((checkboxCell row) :: (viewContentCells columns row))
+    tr [] ((checkboxCell row) :: (viewCells columns row))
 
 
 checkboxCell row =
@@ -142,42 +130,36 @@ checkboxCell row =
         ]
 
 
-viewContentCells columns row =
-    List.map2 viewContentCell columns row.cells
+viewCells columns row =
+    List.filterMap (viewCell row) columns
 
 
-viewContentCell : Column -> ContentCell -> Html msg
-viewContentCell contentColumn cell =
-    if contentColumn.visible then
-        td [] [ text cell.value ]
-    else
-        text ""
+viewCell : Row -> Column -> Maybe (Html Msg)
+viewCell row column =
+    if column.visible then
+        Just
+            (case column.inputType of
+                NoColumnInput ->
+                    td [] [ text (column.getVal row.data) ]
 
-
-viewInputCells inputColumns row =
-    List.map2 (viewInputCell row.id) inputColumns row.inputCells
-
-
-viewInputCell rowId inputColumn cell =
-    if inputColumn.visible then
-        let
-            viewOption val =
-                option [ selected (val == cell.value) ] [ text val ]
-        in
-            case inputColumn.options of
-                NoOptions ->
+                TextColumnInput ->
                     td []
                         [ input
-                            [ onInput (UpdateCellValue rowId cell.id)
-                            , value cell.value
+                            [ onInput (UpdateCellValue row.id row.id)
+                            , value (column.getVal row.data)
                             ]
                             []
                         ]
 
-                OptionsList options ->
-                    td []
-                        [ select [ onInput (UpdateCellValue rowId cell.id) ]
-                            (List.map viewOption options)
-                        ]
+                DropdownColumnInput options ->
+                    let
+                        viewOption val =
+                            option [ selected (val == (column.getVal row.data)) ] [ text val ]
+                    in
+                        td []
+                            [ select [ onInput (UpdateCellValue row.id row.id) ]
+                                (List.map viewOption options)
+                            ]
+            )
     else
-        text ""
+        Nothing

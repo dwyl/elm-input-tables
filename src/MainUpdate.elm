@@ -9,8 +9,9 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateCellValue rowId cellId value ->
-            ( (updateInputCellValue model rowId cellId value), Cmd.none )
+            ( model, Cmd.none )
 
+        -- ( (updateInputCellValue model rowId cellId value), Cmd.none )
         UpdateSearchText value ->
             ( { model | searchText = value }, Cmd.none )
 
@@ -52,19 +53,20 @@ update msg model =
             )
 
 
-updateInputCellValue : Model -> Int -> Int -> String -> Model
-updateInputCellValue model rowId cellId value =
-    let
-        updatedRows =
-            (updateIfHasId rowId) updateRow model.rows
 
-        updateRow row =
-            { row
-                | cells =
-                    (updateIfHasId cellId) (\c -> { c | value = value }) row.cells
-            }
-    in
-        { model | rows = updatedRows }
+-- updateInputCellValue : Model -> Int -> Int -> String -> Model
+-- updateInputCellValue model rowId cellId value =
+--     let
+--         updatedRows =
+--             (updateIfHasId rowId) updateRow model.rows
+--
+--         updateRow row =
+--             { row
+--                 | rowData =
+--                     (updateIfHasId cellId) (\c -> { c | value = value }) row.rowData
+--             }
+--     in
+--         { model | rows = updatedRows }
 
 
 updateFilterText columnId value columns =
