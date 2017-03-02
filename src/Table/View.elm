@@ -192,7 +192,11 @@ viewCell row column =
                         [ text (config.get row.data) ]
 
                     TextColumn config ->
-                        [ input
+                        [ (if config.isTextArea then
+                            textarea
+                           else
+                            input
+                          )
                             [ onInput (UpdateCellValue config.set row.id)
                             , value (config.get row.data)
                             ]

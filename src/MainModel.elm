@@ -41,6 +41,7 @@ type alias TextColumnConfig =
     { get : RowData -> String
     , set : RowData -> String -> RowData
     , filter : String
+    , isTextArea : Bool
     }
 
 
@@ -70,6 +71,7 @@ type alias RowData =
     { selected : Bool
     , title : String
     , author : String
+    , programCode : String
     , reviewCount : String
     , notes : String
     , category : String

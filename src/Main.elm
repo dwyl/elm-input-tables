@@ -14,9 +14,10 @@ initialModel =
         , Column 2 "title" True (DisplayColumn (DisplayColumnConfig .title ""))
         , Column 3 "author" True (DisplayColumn (DisplayColumnConfig .author ""))
         , Column 4 "Review Count" True (DisplayColumn (DisplayColumnConfig .reviewCount ""))
-        , Column 5 "notes" True (TextColumn (TextColumnConfig .notes (\d v -> { d | notes = v }) ""))
-        , Column 6 "category" True (DropdownColumn (DropdownColumnConfig .category (\d v -> { d | category = v }) "" [ "The Doors", "Nina Simone", "Curtis Reading" ]))
-        , Column 7 "decision" True (DropdownColumn (DropdownColumnConfig .decision (\d v -> { d | decision = v }) "" [ "bonobos", "chimps", "orangutans" ]))
+        , Column 5 "program Code" True (TextColumn (TextColumnConfig .programCode (\d v -> { d | notes = v }) "" False))
+        , Column 6 "notes" True (TextColumn (TextColumnConfig .notes (\d v -> { d | notes = v }) "" True))
+        , Column 7 "category" True (DropdownColumn (DropdownColumnConfig .category (\d v -> { d | category = v }) "" [ "The Doors", "Nina Simone", "Curtis Reading" ]))
+        , Column 8 "decision" True (DropdownColumn (DropdownColumnConfig .decision (\d v -> { d | decision = v }) "" [ "bonobos", "chimps", "orangutans" ]))
         ]
     , rows = initialRows
     , searchText = ""
@@ -26,7 +27,7 @@ initialModel =
 
 
 initialRows =
-    List.range 1 5
+    List.range 1 10
         |> List.map makeRow
 
 
@@ -38,8 +39,9 @@ makeRow id =
         , author = makeAuthor id
         , reviewCount = "reviewCount " ++ (toString id)
         , notes = "notes " ++ (toString id)
-        , category = "category " ++ (toString id)
-        , decision = "decision " ++ (toString id)
+        , programCode = makeProgramCode id
+        , category = "The Doors"
+        , decision = "bonobos"
         }
     , checked = False
     }
@@ -52,6 +54,17 @@ makeAuthor id =
         "Conor Campbell"
     else
         "Naaz Ahmed"
+
+
+makeProgramCode id =
+    if id % 4 == 0 then
+        "P" ++ (toString id)
+    else if id % 4 == 1 then
+        "O" ++ (toString id)
+    else if id % 4 == 2 then
+        "I" ++ (toString id)
+    else
+        "T" ++ (toString id)
 
 
 init : ( Model, Cmd Msg )
