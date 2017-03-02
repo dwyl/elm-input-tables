@@ -19,17 +19,44 @@ type Sorting
 type alias Column =
     { id : Int
     , name : String
-    , getVal : RowData -> String
-    , filterText : String
     , visible : Bool
-    , input : ColumnInput
+    , config : ColumnConfig
     }
 
 
-type ColumnInput
-    = NoColumnInput
-    | TextColumnInput (RowData -> String -> RowData)
-    | DropdownColumnInput (RowData -> String -> RowData) (List String)
+type ColumnConfig
+    = DisplayColumn DisplayColumnConfig
+    | TextColumn TextColumnConfig
+    | DropdownColumn DropdownColumnConfig
+    | CheckboxColumn CheckboxColumnConfig
+
+
+type alias DisplayColumnConfig =
+    { get : RowData -> String
+    , filter : String
+    }
+
+
+type alias TextColumnConfig =
+    { get : RowData -> String
+    , set : RowData -> String -> RowData
+    , filter : String
+    }
+
+
+type alias DropdownColumnConfig =
+    { get : RowData -> String
+    , set : RowData -> String -> RowData
+    , filter : String
+    , options : List String
+    }
+
+
+type alias CheckboxColumnConfig =
+    { get : RowData -> Bool
+    , set : RowData -> Bool -> RowData
+    , filter : Maybe Bool
+    }
 
 
 type alias Row =
@@ -40,7 +67,8 @@ type alias Row =
 
 
 type alias RowData =
-    { title : String
+    { selected : Bool
+    , title : String
     , author : String
     , reviewCount : String
     , notes : String

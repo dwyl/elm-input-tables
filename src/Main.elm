@@ -10,12 +10,13 @@ import MainView
 initialModel : Model
 initialModel =
     { columns =
-        [ Column 1 "title" .title "" True NoColumnInput
-        , Column 2 "author" .author "" True NoColumnInput
-        , Column 3 "Review Count" .reviewCount "" True NoColumnInput
-        , Column 4 "notes" .notes "" True (TextColumnInput (\d v -> { d | notes = v }))
-        , Column 5 "category" .category "" True (DropdownColumnInput (\d v -> { d | category = v }) [ "The Doors", "Nina Simone", "Curtis Reading" ])
-        , Column 6 "decision" .decision "" True (DropdownColumnInput (\d v -> { d | decision = v }) [ "bonobos", "chimps", "orangutans" ])
+        [ Column 1 "id" True (CheckboxColumn (CheckboxColumnConfig .selected (\d _ -> { d | selected = not d.selected }) Nothing))
+        , Column 2 "title" True (DisplayColumn (DisplayColumnConfig .title ""))
+        , Column 3 "author" True (DisplayColumn (DisplayColumnConfig .author ""))
+        , Column 4 "Review Count" True (DisplayColumn (DisplayColumnConfig .reviewCount ""))
+        , Column 5 "notes" True (TextColumn (TextColumnConfig .notes (\d v -> { d | notes = v }) ""))
+        , Column 6 "category" True (DropdownColumn (DropdownColumnConfig .category (\d v -> { d | category = v }) "" [ "The Doors", "Nina Simone", "Curtis Reading" ]))
+        , Column 7 "decision" True (DropdownColumn (DropdownColumnConfig .decision (\d v -> { d | decision = v }) "" [ "bonobos", "chimps", "orangutans" ]))
         ]
     , rows = initialRows
     , searchText = ""
@@ -25,14 +26,15 @@ initialModel =
 
 
 initialRows =
-    List.range 1 100
+    List.range 1 5
         |> List.map makeRow
 
 
 makeRow id =
     { id = id
     , data =
-        { title = "title " ++ (toString id)
+        { selected = False
+        , title = "title " ++ (toString id)
         , author = makeAuthor id
         , reviewCount = "reviewCount " ++ (toString id)
         , notes = "notes " ++ (toString id)
@@ -50,34 +52,6 @@ makeAuthor id =
         "Conor Campbell"
     else
         "Naaz Ahmed"
-
-
-row1 =
-    { id = 1
-    , data =
-        { title = "title 1"
-        , author = "author 1"
-        , reviewCount = "reviewCount 1"
-        , notes = "notes 1"
-        , category = "category 1"
-        , decision = "decision 1"
-        }
-    , checked = False
-    }
-
-
-row2 =
-    { id = 2
-    , data =
-        { title = "title 2"
-        , author = "author 2"
-        , reviewCount = "reviewCount 2"
-        , notes = "notes 2"
-        , category = "category 2"
-        , decision = "decision 2"
-        }
-    , checked = False
-    }
 
 
 init : ( Model, Cmd Msg )

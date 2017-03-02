@@ -1,8 +1,9 @@
 module Table.View exposing (view)
 
 import Html exposing (..)
-import Html.Attributes exposing (checked, class, hidden, placeholder, selected, type_, value)
+import Html.Attributes exposing (checked, class, hidden, placeholder, selected, style, type_, value)
 import Html.Events exposing (onClick, onInput)
+import Html.Keyed as Keyed
 import MainMessages exposing (..)
 import MainModel exposing (..)
 import Table.RowFilter as RowFilter
@@ -34,7 +35,8 @@ view model =
             , table [ class "table table-condensed table-bordered" ]
                 [ thead []
                     (viewHeaders model)
-                , tbody []
+                , Keyed.node "tbody"
+                    []
                     (List.map (viewTableRow model.columns) visibleRows)
                 ]
             ]
@@ -73,6 +75,33 @@ viewHeader : Sorting -> Column -> Maybe (Html Msg)
 viewHeader sorting column =
     if column.visible then
         let
+            stringFilter config =
+                input
+                    [ placeholder "Filter"
+                    , value config.filter
+                    , onInput (UpdateColumnFilterText column.id)
+                    ]
+                    []
+
+            boolFilter config =
+                let
+                    ( nextFilter, filterText ) =
+                        case config.filter of
+                            Nothing ->
+                                ( Just True, "No Filter" )
+
+                            Just True ->
+                                ( Just False, "Checked" )
+
+                            Just False ->
+                                ( Nothing, "Unchecked" )
+                in
+                    a
+                        [ onClick (SwitchColumnCheckboxFilter column.id nextFilter)
+                        , style [ ( "cursor", "pointer" ) ]
+                        ]
+                        [ text filterText ]
+
             sortingText =
                 case sorting of
                     NoSorting ->
@@ -96,12 +125,19 @@ viewHeader sorting column =
                         [ span [] [ text column.name ]
                         , button [ onClick (SortRows column) ] [ text sortingText ]
                         ]
-                    , input
-                        [ placeholder "Filter"
-                        , value column.filterText
-                        , onInput (UpdateColumnFilterText column.id)
-                        ]
-                        []
+                    , (case column.config of
+                        DisplayColumn config ->
+                            stringFilter config
+
+                        TextColumn config ->
+                            stringFilter config
+
+                        DropdownColumn config ->
+                            stringFilter config
+
+                        CheckboxColumn config ->
+                            boolFilter config
+                      )
                     ]
                 )
     else
@@ -130,9 +166,9 @@ viewInputHeader column =
         Nothing
 
 
-viewTableRow : List Column -> Row -> Html Msg
+viewTableRow : List Column -> Row -> ( String, Html Msg )
 viewTableRow columns row =
-    tr [] ((checkboxCell row) :: (viewCells columns row))
+    ( (toString row.id), tr [] ((checkboxCell row) :: (viewCells columns row)) )
 
 
 checkboxCell row =
@@ -149,33 +185,38 @@ viewCells columns row =
 viewCell : Row -> Column -> Maybe (Html Msg)
 viewCell row column =
     if column.visible then
-        let
-            val =
-                column.getVal row.data
-        in
-            Just
-                (case column.input of
-                    NoColumnInput ->
-                        td [] [ text (column.getVal row.data) ]
+        Just
+            (td []
+                (case column.config of
+                    DisplayColumn config ->
+                        [ text (config.get row.data) ]
 
-                    TextColumnInput setter ->
-                        td []
-                            [ input
-                                [ onInput (UpdateCellValue setter row.id)
-                                , value val
-                                ]
-                                []
+                    TextColumn config ->
+                        [ input
+                            [ onInput (UpdateCellValue config.set row.id)
+                            , value (config.get row.data)
                             ]
+                            []
+                        ]
 
-                    DropdownColumnInput setter options ->
+                    DropdownColumn config ->
                         let
                             viewOption optionsValue =
-                                option [ selected (optionsValue == val) ] [ text optionsValue ]
+                                option [ selected (optionsValue == (config.get row.data)) ] [ text optionsValue ]
                         in
-                            td []
-                                [ select [ onInput (UpdateCellValue setter row.id) ]
-                                    (List.map viewOption options)
-                                ]
+                            [ select [ onInput (UpdateCellValue config.set row.id) ]
+                                (List.map viewOption config.options)
+                            ]
+
+                    CheckboxColumn config ->
+                        [ input
+                            [ type_ "checkbox"
+                            , checked (config.get row.data)
+                            , onClick (UpdateBoolCellValue config.set row.id)
+                            ]
+                            []
+                        ]
                 )
+            )
     else
         Nothing

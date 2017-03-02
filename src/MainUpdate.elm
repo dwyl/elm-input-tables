@@ -12,6 +12,9 @@ update msg model =
         UpdateCellValue setter rowId value ->
             ( { model | rows = setCellData model.rows setter rowId value }, Cmd.none )
 
+        UpdateBoolCellValue setter rowId ->
+            ( { model | rows = setCellData model.rows setter rowId True }, Cmd.none )
+
         UpdateSearchText value ->
             ( { model | searchText = value }, Cmd.none )
 
@@ -19,6 +22,14 @@ update msg model =
             ( { model
                 | columns =
                     updateFilterText columnId value model.columns
+              }
+            , Cmd.none
+            )
+
+        SwitchColumnCheckboxFilter columnId newFilterState ->
+            ( { model
+                | columns =
+                    switchCheckboxFilter columnId newFilterState model.columns
               }
             , Cmd.none
             )
@@ -47,23 +58,43 @@ update msg model =
         ToggleColumnVisibility columndId ->
             ( { model
                 | columns =
-                    updateIfHasId columndId (\r -> { r | visible = not r.visible }) model.columns
+                    updateIfHasId columndId (\c -> { c | visible = not c.visible }) model.columns
               }
             , Cmd.none
             )
 
-        SortRows { id, getVal } ->
+        SortRows { id, config } ->
             let
                 sortedByVals =
+                    case config of
+                        DisplayColumn config ->
+                            sortComparable config.get
+
+                        TextColumn config ->
+                            sortComparable config.get
+
+                        DropdownColumn config ->
+                            sortComparable config.get
+
+                        CheckboxColumn config ->
+                            sortComparable (config.get >> converBoolToString)
+
+                converBoolToString bool =
+                    if bool then
+                        "1"
+                    else
+                        "0"
+
+                sortComparable get =
                     case model.sorting of
                         Asc currentSortId ->
                             if currentSortId == id then
-                                ( sortByVal model.rows getVal False, Desc id )
+                                ( sortByVal model.rows get False, Desc id )
                             else
-                                ( sortByVal model.rows getVal True, Asc id )
+                                ( sortByVal model.rows get True, Asc id )
 
                         _ ->
-                            ( sortByVal model.rows getVal True, Asc id )
+                            ( sortByVal model.rows get True, Asc id )
             in
                 ( { model
                     | rows = first sortedByVals
@@ -82,8 +113,49 @@ setCellData rows setter rowId value =
         updateIfHasId rowId update rows
 
 
+updateFilterText : Int -> String -> List Column -> List Column
 updateFilterText columnId value columns =
-    updateIfHasId columnId (\c -> { c | filterText = value }) columns
+    let
+        updateIfText column =
+            case column.config of
+                DisplayColumn config ->
+                    DisplayColumn (update config)
+
+                TextColumn config ->
+                    TextColumn (update config)
+
+                DropdownColumn config ->
+                    DropdownColumn (update config)
+
+                CheckboxColumn config ->
+                    CheckboxColumn config
+
+        update config =
+            { config | filter = value }
+    in
+        updateIfHasId columnId (\c -> { c | config = updateIfText c }) columns
+
+
+switchCheckboxFilter columnId newFilterState columns =
+    let
+        updateIfText column =
+            case column.config of
+                DisplayColumn config ->
+                    DisplayColumn config
+
+                TextColumn config ->
+                    TextColumn config
+
+                DropdownColumn config ->
+                    DropdownColumn config
+
+                CheckboxColumn config ->
+                    CheckboxColumn (update config)
+
+        update config =
+            { config | filter = newFilterState }
+    in
+        updateIfHasId columnId (\c -> { c | config = updateIfText c }) columns
 
 
 sortByVal : List Row -> (RowData -> String) -> Bool -> List Row
