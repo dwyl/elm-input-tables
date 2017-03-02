@@ -20,24 +20,24 @@ type alias Column =
     { id : Int
     , name : String
     , visible : Bool
-    , config : ColumnConfig
+    , subType : ColumnSubType
     }
 
 
-type ColumnConfig
-    = DisplayColumn DisplayColumnConfig
-    | TextColumn TextColumnConfig
-    | DropdownColumn DropdownColumnConfig
-    | CheckboxColumn CheckboxColumnConfig
+type ColumnSubType
+    = DisplayColumn DisplayColumnProps
+    | TextColumn TextColumnProps
+    | DropdownColumn DropdownColumnProps
+    | CheckboxColumn CheckboxColumnProps
 
 
-type alias DisplayColumnConfig =
+type alias DisplayColumnProps =
     { get : RowData -> String
     , filter : String
     }
 
 
-type alias TextColumnConfig =
+type alias TextColumnProps =
     { get : RowData -> String
     , set : RowData -> String -> RowData
     , filter : String
@@ -45,7 +45,7 @@ type alias TextColumnConfig =
     }
 
 
-type alias DropdownColumnConfig =
+type alias DropdownColumnProps =
     { get : RowData -> String
     , set : RowData -> String -> RowData
     , filter : String
@@ -53,7 +53,7 @@ type alias DropdownColumnConfig =
     }
 
 
-type alias CheckboxColumnConfig =
+type alias CheckboxColumnProps =
     { get : RowData -> Bool
     , set : RowData -> Bool -> RowData
     , filter : Maybe Bool

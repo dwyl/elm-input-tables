@@ -63,21 +63,21 @@ update msg model =
             , Cmd.none
             )
 
-        SortRows { id, config } ->
+        SortRows { id, subType } ->
             let
                 sortedByVals =
-                    case config of
-                        DisplayColumn config ->
-                            sortComparable config.get
+                    case subType of
+                        DisplayColumn subType ->
+                            sortComparable subType.get
 
-                        TextColumn config ->
-                            sortComparable config.get
+                        TextColumn subType ->
+                            sortComparable subType.get
 
-                        DropdownColumn config ->
-                            sortComparable config.get
+                        DropdownColumn subType ->
+                            sortComparable subType.get
 
-                        CheckboxColumn config ->
-                            sortComparable (config.get >> converBoolToString)
+                        CheckboxColumn subType ->
+                            sortComparable (subType.get >> converBoolToString)
 
                 converBoolToString bool =
                     if bool then
@@ -117,45 +117,45 @@ updateFilterText : Int -> String -> List Column -> List Column
 updateFilterText columnId value columns =
     let
         updateIfText column =
-            case column.config of
-                DisplayColumn config ->
-                    DisplayColumn (update config)
+            case column.subType of
+                DisplayColumn props ->
+                    DisplayColumn (update props)
 
-                TextColumn config ->
-                    TextColumn (update config)
+                TextColumn props ->
+                    TextColumn (update props)
 
-                DropdownColumn config ->
-                    DropdownColumn (update config)
+                DropdownColumn props ->
+                    DropdownColumn (update props)
 
-                CheckboxColumn config ->
-                    CheckboxColumn config
+                CheckboxColumn props ->
+                    CheckboxColumn props
 
-        update config =
-            { config | filter = value }
+        update props =
+            { props | filter = value }
     in
-        updateIfHasId columnId (\c -> { c | config = updateIfText c }) columns
+        updateIfHasId columnId (\c -> { c | subType = updateIfText c }) columns
 
 
 switchCheckboxFilter columnId newFilterState columns =
     let
         updateIfText column =
-            case column.config of
-                DisplayColumn config ->
-                    DisplayColumn config
+            case column.subType of
+                DisplayColumn props ->
+                    DisplayColumn props
 
-                TextColumn config ->
-                    TextColumn config
+                TextColumn props ->
+                    TextColumn props
 
-                DropdownColumn config ->
-                    DropdownColumn config
+                DropdownColumn props ->
+                    DropdownColumn props
 
-                CheckboxColumn config ->
-                    CheckboxColumn (update config)
+                CheckboxColumn props ->
+                    CheckboxColumn (update props)
 
-        update config =
-            { config | filter = newFilterState }
+        update props =
+            { props | filter = newFilterState }
     in
-        updateIfHasId columnId (\c -> { c | config = updateIfText c }) columns
+        updateIfHasId columnId (\c -> { c | subType = updateIfText c }) columns
 
 
 sortByVal : List Row -> (RowData -> String) -> Bool -> List Row

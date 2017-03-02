@@ -125,18 +125,18 @@ viewHeader sorting column =
                         [ span [] [ text column.name ]
                         , button [ onClick (SortRows column) ] [ text sortingText ]
                         ]
-                    , (case column.config of
-                        DisplayColumn config ->
-                            stringFilter config
+                    , (case column.subType of
+                        DisplayColumn props ->
+                            stringFilter props
 
-                        TextColumn config ->
-                            stringFilter config
+                        TextColumn props ->
+                            stringFilter props
 
-                        DropdownColumn config ->
-                            stringFilter config
+                        DropdownColumn props ->
+                            stringFilter props
 
-                        CheckboxColumn config ->
-                            boolFilter config
+                        CheckboxColumn props ->
+                            boolFilter props
                       )
                     ]
                 )
@@ -187,36 +187,36 @@ viewCell row column =
     if column.visible then
         Just
             (td []
-                (case column.config of
-                    DisplayColumn config ->
-                        [ text (config.get row.data) ]
+                (case column.subType of
+                    DisplayColumn props ->
+                        [ text (props.get row.data) ]
 
-                    TextColumn config ->
-                        [ (if config.isTextArea then
+                    TextColumn props ->
+                        [ (if props.isTextArea then
                             textarea
                            else
                             input
                           )
-                            [ onInput (UpdateCellValue config.set row.id)
-                            , value (config.get row.data)
+                            [ onInput (UpdateCellValue props.set row.id)
+                            , value (props.get row.data)
                             ]
                             []
                         ]
 
-                    DropdownColumn config ->
+                    DropdownColumn props ->
                         let
                             viewOption optionsValue =
-                                option [ selected (optionsValue == (config.get row.data)) ] [ text optionsValue ]
+                                option [ selected (optionsValue == (props.get row.data)) ] [ text optionsValue ]
                         in
-                            [ select [ onInput (UpdateCellValue config.set row.id) ]
-                                (List.map viewOption config.options)
+                            [ select [ onInput (UpdateCellValue props.set row.id) ]
+                                (List.map viewOption props.options)
                             ]
 
-                    CheckboxColumn config ->
+                    CheckboxColumn props ->
                         [ input
                             [ type_ "checkbox"
-                            , checked (config.get row.data)
-                            , onClick (UpdateBoolCellValue config.set row.id)
+                            , checked (props.get row.data)
+                            , onClick (UpdateBoolCellValue props.set row.id)
                             ]
                             []
                         ]

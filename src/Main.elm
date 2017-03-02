@@ -10,14 +10,14 @@ import MainView
 initialModel : Model
 initialModel =
     { columns =
-        [ Column 1 "id" True (CheckboxColumn (CheckboxColumnConfig .selected (\d _ -> { d | selected = not d.selected }) Nothing))
-        , Column 2 "title" True (DisplayColumn (DisplayColumnConfig .title ""))
-        , Column 3 "author" True (DisplayColumn (DisplayColumnConfig .author ""))
-        , Column 4 "Review Count" True (DisplayColumn (DisplayColumnConfig .reviewCount ""))
-        , Column 5 "program Code" True (TextColumn (TextColumnConfig .programCode (\d v -> { d | notes = v }) "" False))
-        , Column 6 "notes" True (TextColumn (TextColumnConfig .notes (\d v -> { d | notes = v }) "" True))
-        , Column 7 "category" True (DropdownColumn (DropdownColumnConfig .category (\d v -> { d | category = v }) "" [ "The Doors", "Nina Simone", "Curtis Reading" ]))
-        , Column 8 "decision" True (DropdownColumn (DropdownColumnConfig .decision (\d v -> { d | decision = v }) "" [ "bonobos", "chimps", "orangutans" ]))
+        [ Column 1 "id" True (CheckboxColumn (CheckboxColumnProps .selected (\d _ -> { d | selected = not d.selected }) Nothing))
+        , Column 2 "title" True (DisplayColumn (DisplayColumnProps .title ""))
+        , Column 3 "author" True (DisplayColumn (DisplayColumnProps .author ""))
+        , Column 4 "Review Count" True (DisplayColumn (DisplayColumnProps .reviewCount ""))
+        , Column 5 "program Code" True (TextColumn (TextColumnProps .programCode (\d v -> { d | notes = v }) "" False))
+        , Column 6 "notes" True (TextColumn (TextColumnProps .notes (\d v -> { d | notes = v }) "" True))
+        , Column 7 "category" True (DropdownColumn (DropdownColumnProps .category (\d v -> { d | category = v }) "" [ "The Doors", "Nina Simone", "Curtis Reading" ]))
+        , Column 8 "decision" True (DropdownColumn (DropdownColumnProps .decision (\d v -> { d | decision = v }) "" [ "bonobos", "chimps", "orangutans" ]))
         ]
     , rows = initialRows
     , searchText = ""

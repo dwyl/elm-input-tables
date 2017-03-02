@@ -16,42 +16,42 @@ filter rows columns searchText =
 
 
 columnPassesSearch searchText row column =
-    case column.config of
-        DisplayColumn config ->
-            containsCi (config.get row.data) searchText
+    case column.subType of
+        DisplayColumn props ->
+            containsCi (props.get row.data) searchText
 
-        TextColumn config ->
-            containsCi (config.get row.data) searchText
+        TextColumn props ->
+            containsCi (props.get row.data) searchText
 
-        DropdownColumn config ->
-            containsCi (config.get row.data) searchText
+        DropdownColumn props ->
+            containsCi (props.get row.data) searchText
 
-        CheckboxColumn config ->
+        CheckboxColumn props ->
             False
 
 
 columnPassesFilter row column =
-    case column.config of
-        DisplayColumn config ->
-            isFilterSubstring row config
+    case column.subType of
+        DisplayColumn props ->
+            isFilterSubstring row props
 
-        TextColumn config ->
-            isFilterSubstring row config
+        TextColumn props ->
+            isFilterSubstring row props
 
-        DropdownColumn config ->
-            isFilterSubstring row config
+        DropdownColumn props ->
+            isFilterSubstring row props
 
-        CheckboxColumn config ->
-            case config.filter of
+        CheckboxColumn props ->
+            case props.filter of
                 Nothing ->
                     True
 
                 Just bool ->
-                    (config.get row.data) == bool
+                    (props.get row.data) == bool
 
 
-isFilterSubstring row config =
-    containsCi (config.get row.data) config.filter
+isFilterSubstring row props =
+    containsCi (props.get row.data) props.filter
 
 
 containsCi subString string =
