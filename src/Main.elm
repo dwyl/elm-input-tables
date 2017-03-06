@@ -10,12 +10,12 @@ import MainView
 initialModel : Model
 initialModel =
     { columns =
-        [ Column 1 "id" True (CheckboxColumn (CheckboxColumnProps .selected (\d _ -> { d | selected = not d.selected }) Nothing))
-        , Column 2 "title" True (DisplayColumn (DisplayColumnProps .title ""))
+        [ Column 2 "title" True (DisplayColumn (DisplayColumnProps .title ""))
         , Column 3 "author" True (DisplayColumn (DisplayColumnProps .author ""))
         , Column 4 "Review Count" True (DisplayColumn (DisplayColumnProps .reviewCount ""))
         , Column 5 "program Code" True (TextColumn (TextColumnProps .programCode (\d v -> { d | notes = v }) "" False))
         , Column 6 "notes" True (TextColumn (TextColumnProps .notes (\d v -> { d | notes = v }) "" True))
+        , Column 1 "C.O.I" True (CheckboxColumn (CheckboxColumnProps .conflictOfInterest (\d _ -> { d | conflictOfInterest = not d.conflictOfInterest }) Nothing))
         , Column 7 "category" True (DropdownColumn (DropdownColumnProps .category (\d v -> { d | category = v }) "" [ "The Doors", "Nina Simone", "Curtis Reading" ]))
         , Column 8 "decision" True (DropdownColumn (DropdownColumnProps .decision (\d v -> { d | decision = v }) "" [ "bonobos", "chimps", "orangutans" ]))
         ]
@@ -27,14 +27,14 @@ initialModel =
 
 
 initialRows =
-    List.range 1 10
+    List.range 1 50
         |> List.map makeRow
 
 
 makeRow id =
     { id = id
     , data =
-        { selected = False
+        { conflictOfInterest = False
         , title = "title " ++ (toString id)
         , author = makeAuthor id
         , reviewCount = "reviewCount " ++ (toString id)

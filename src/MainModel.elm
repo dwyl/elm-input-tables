@@ -68,7 +68,7 @@ type alias Row =
 
 
 type alias RowData =
-    { selected : Bool
+    { conflictOfInterest : Bool
     , title : String
     , author : String
     , programCode : String
@@ -76,10 +76,4 @@ type alias RowData =
     , notes : String
     , category : String
     , decision : String
-    }
-
-
-type alias ContentCell =
-    { id : Int
-    , value : String
     }
