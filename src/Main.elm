@@ -12,7 +12,7 @@ initialModel =
     { columns =
         [ Column 2 "title" True (DisplayColumn (DisplayColumnProps .title ""))
         , Column 3 "author" True (DisplayColumn (DisplayColumnProps .author ""))
-        , Column 4 "Review Count" True (DisplayColumn (DisplayColumnProps .reviewCount ""))
+          -- , Column 4 "Review Count" True (DisplayColumn (DisplayColumnProps .reviewCount ""))
         , Column 5 "program Code" True (TextColumn (TextColumnProps .programCode (\d v -> { d | notes = v }) "" False))
         , Column 6 "notes" True (TextColumn (TextColumnProps .notes (\d v -> { d | notes = v }) "" True))
         , Column 1 "C.O.I" True (CheckboxColumn (CheckboxColumnProps .conflictOfInterest (\d _ -> { d | conflictOfInterest = not d.conflictOfInterest }) Nothing))

@@ -2,7 +2,6 @@ module Table.RowFilter exposing (filter)
 
 import String exposing (contains, toLower, length)
 import MainModel exposing (..)
-import Table.Utils exposing (..)
 
 
 filter : List Row -> List Column -> String -> List Row
@@ -15,6 +14,7 @@ filter rows columns searchText =
         List.filter allColumnsPassFilterAndSearch rows
 
 
+columnPassesSearch : String -> Row -> Column -> Bool
 columnPassesSearch searchText row column =
     case column.subType of
         DisplayColumn props ->
@@ -30,6 +30,7 @@ columnPassesSearch searchText row column =
             False
 
 
+columnPassesFilter : Row -> Column -> Bool
 columnPassesFilter row column =
     case column.subType of
         DisplayColumn props ->
@@ -50,9 +51,11 @@ columnPassesFilter row column =
                     (props.get row.data) == bool
 
 
+isFilterSubstring : Row -> { a | filter : String, get : RowData -> String } -> Bool
 isFilterSubstring row props =
     containsCi (props.get row.data) props.filter
 
 
+containsCi : String -> String -> Bool
 containsCi subString string =
     (contains (toLower string) (toLower subString))

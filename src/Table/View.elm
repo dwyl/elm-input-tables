@@ -1,7 +1,7 @@
 module Table.View exposing (view)
 
 import Html exposing (..)
-import Html.Attributes exposing (checked, class, hidden, placeholder, selected, style, type_, value)
+import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Html.Keyed as Keyed
 import MainMessages exposing (..)
