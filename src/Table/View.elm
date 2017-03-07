@@ -7,6 +7,7 @@ import Html.Keyed as Keyed
 import MainMessages exposing (..)
 import MainModel exposing (..)
 import Table.RowFilter as RowFilter
+import Table.ViewCell as ViewCell
 
 
 -- add tests for filtering
@@ -42,6 +43,7 @@ view model =
             ]
 
 
+viewChooseVisibleColumnButtons : Model -> Html Msg
 viewChooseVisibleColumnButtons model =
     div [ hidden (not model.showVisibleColumnsUi) ]
         (List.map
@@ -50,14 +52,17 @@ viewChooseVisibleColumnButtons model =
         )
 
 
+viewChooseVisibleColumnButton : (Int -> Msg) -> Column -> Html Msg
 viewChooseVisibleColumnButton message column =
     button [ onClick (message column.id) ] [ text column.name ]
 
 
+viewHeaders : Model -> List (Html Msg)
 viewHeaders model =
     [ tr [] ((checkboxHeader model) :: (viewOtherHeaders model)) ]
 
 
+checkboxHeader : Model -> Html Msg
 checkboxHeader model =
     th [] [ checkbox ToggleAllRowsCheckboxes (List.all .checked model.rows) ]
 
@@ -67,6 +72,7 @@ checkbox message checkedVal =
     input [ type_ "checkbox", checked checkedVal, onClick message ] []
 
 
+viewOtherHeaders : Model -> List (Html Msg)
 viewOtherHeaders model =
     List.filterMap (viewHeader model.sorting) model.columns
 
@@ -135,33 +141,14 @@ viewHeader sorting column =
                         DropdownColumn props ->
                             stringFilter props
 
+                        SubDropdownColumn props ->
+                            stringFilter props
+
                         CheckboxColumn props ->
                             boolFilter props
                       )
                     ]
                 )
-    else
-        Nothing
-
-
-viewInputHeaders model =
-    List.filterMap viewInputHeader model.inputColumns
-
-
-viewInputHeader column =
-    if column.visible then
-        Just
-            (th
-                []
-                [ div [] [ text column.name ]
-                , input
-                    [ placeholder "Filter"
-                    , value column.filterText
-                    , onInput (UpdateColumnFilterText column.id)
-                    ]
-                    []
-                ]
-            )
     else
         Nothing
 
@@ -179,48 +166,4 @@ checkboxCell row =
 
 
 viewCells columns row =
-    List.filterMap (viewCell row) columns
-
-
-viewCell : Row -> Column -> Maybe (Html Msg)
-viewCell row column =
-    if column.visible then
-        Just
-            (td []
-                (case column.subType of
-                    DisplayColumn props ->
-                        [ text (props.get row.data) ]
-
-                    TextColumn props ->
-                        [ (if props.isTextArea then
-                            textarea
-                           else
-                            input
-                          )
-                            [ onInput (UpdateCellValue props.set row.id)
-                            , value (props.get row.data)
-                            ]
-                            []
-                        ]
-
-                    DropdownColumn props ->
-                        let
-                            viewOption optionsValue =
-                                option [ selected (optionsValue == (props.get row.data)) ] [ text optionsValue ]
-                        in
-                            [ select [ onInput (UpdateCellValue props.set row.id) ]
-                                (List.map viewOption props.options)
-                            ]
-
-                    CheckboxColumn props ->
-                        [ input
-                            [ type_ "checkbox"
-                            , checked (props.get row.data)
-                            , onClick (UpdateBoolCellValue props.set row.id)
-                            ]
-                            []
-                        ]
-                )
-            )
-    else
-        Nothing
+    List.filterMap (ViewCell.view row) columns

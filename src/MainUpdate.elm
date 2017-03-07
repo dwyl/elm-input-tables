@@ -15,6 +15,107 @@ update msg model =
         UpdateBoolCellValue setter rowId ->
             ( { model | rows = setCellData model.rows setter rowId True }, Cmd.none )
 
+        ToggleCellDropdown rowId columnId ->
+            let
+                update column =
+                    case column.subType of
+                        SubDropdownColumn props ->
+                            let
+                                newProps =
+                                    { props
+                                        | focussedRowId = Just rowId
+                                        , focussedOption = Nothing
+                                    }
+                            in
+                                { column | subType = SubDropdownColumn newProps }
+
+                        _ ->
+                            column
+            in
+                ( { model
+                    | columns =
+                        updateIfHasId columnId update model.columns
+                  }
+                , Cmd.none
+                )
+
+        ViewDropdownChildren rowId columnId choice set ->
+            let
+                updateColumn column =
+                    case column.subType of
+                        SubDropdownColumn props ->
+                            let
+                                newProps =
+                                    { props
+                                        | focussedRowId = Just rowId
+                                        , focussedOption = Just choice
+                                    }
+                            in
+                                { column | subType = SubDropdownColumn newProps }
+
+                        _ ->
+                            column
+            in
+                ( { model
+                    | columns = updateIfHasId columnId updateColumn model.columns
+                  }
+                , Cmd.none
+                )
+
+        SelectDropdownParent rowId columnId choice set ->
+            let
+                updateColumn column =
+                    case column.subType of
+                        SubDropdownColumn props ->
+                            let
+                                newProps =
+                                    { props
+                                        | focussedRowId = Nothing
+                                        , focussedOption = Nothing
+                                    }
+                            in
+                                { column | subType = SubDropdownColumn newProps }
+
+                        _ ->
+                            column
+
+                updateRow row =
+                    { row | data = set row.data ( choice, Nothing ) }
+            in
+                ( { model
+                    | columns = updateIfHasId columnId updateColumn model.columns
+                    , rows = updateIfHasId rowId updateRow model.rows
+                  }
+                , Cmd.none
+                )
+
+        SelectDropdownChild rowId columnId choice subChoice set ->
+            let
+                updateColumn column =
+                    case column.subType of
+                        SubDropdownColumn props ->
+                            let
+                                newProps =
+                                    { props
+                                        | focussedRowId = Nothing
+                                        , focussedOption = Nothing
+                                    }
+                            in
+                                { column | subType = SubDropdownColumn newProps }
+
+                        _ ->
+                            column
+
+                updateRow row =
+                    { row | data = set row.data ( choice, Just subChoice ) }
+            in
+                ( { model
+                    | columns = updateIfHasId columnId updateColumn model.columns
+                    , rows = updateIfHasId rowId updateRow model.rows
+                  }
+                , Cmd.none
+                )
+
         UpdateSearchText value ->
             ( { model | searchText = value }, Cmd.none )
 
@@ -76,8 +177,14 @@ update msg model =
                         DropdownColumn subType ->
                             sortComparable subType.get
 
+                        SubDropdownColumn subType ->
+                            sortComparable (subType.get >> convertSubDropdownToString)
+
                         CheckboxColumn subType ->
                             sortComparable (subType.get >> converBoolToString)
+
+                convertSubDropdownToString ( choice, subChoice ) =
+                    choice ++ (Maybe.withDefault "" subChoice)
 
                 converBoolToString bool =
                     if bool then
@@ -127,6 +234,9 @@ updateFilterText columnId value columns =
                 DropdownColumn props ->
                     DropdownColumn (update props)
 
+                SubDropdownColumn props ->
+                    SubDropdownColumn (update props)
+
                 CheckboxColumn props ->
                     CheckboxColumn props
 
@@ -148,6 +258,9 @@ switchCheckboxFilter columnId newFilterState columns =
 
                 DropdownColumn props ->
                     DropdownColumn props
+
+                SubDropdownColumn props ->
+                    SubDropdownColumn props
 
                 CheckboxColumn props ->
                     CheckboxColumn (update props)

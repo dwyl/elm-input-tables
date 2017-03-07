@@ -26,6 +26,14 @@ columnPassesSearch searchText row column =
         DropdownColumn props ->
             containsCi (props.get row.data) searchText
 
+        SubDropdownColumn props ->
+            let
+                ( choice, subChoice ) =
+                    props.get row.data
+            in
+                containsCi choice searchText
+                    || containsCi (Maybe.withDefault "" subChoice) searchText
+
         CheckboxColumn props ->
             False
 
@@ -41,6 +49,14 @@ columnPassesFilter row column =
 
         DropdownColumn props ->
             isFilterSubstring row props
+
+        SubDropdownColumn props ->
+            let
+                ( choice, subChoice ) =
+                    props.get row.data
+            in
+                containsCi choice props.filter
+                    || containsCi (Maybe.withDefault "" subChoice) props.filter
 
         CheckboxColumn props ->
             case props.filter of

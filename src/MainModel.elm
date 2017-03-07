@@ -28,6 +28,7 @@ type ColumnSubType
     = DisplayColumn DisplayColumnProps
     | TextColumn TextColumnProps
     | DropdownColumn DropdownColumnProps
+    | SubDropdownColumn SubDropdownColumnProps
     | CheckboxColumn CheckboxColumnProps
 
 
@@ -53,6 +54,16 @@ type alias DropdownColumnProps =
     }
 
 
+type alias SubDropdownColumnProps =
+    { get : RowData -> ( String, Maybe String )
+    , set : RowData -> ( String, Maybe String ) -> RowData
+    , filter : String
+    , options : List ( String, List String )
+    , focussedRowId : Maybe Int
+    , focussedOption : Maybe String
+    }
+
+
 type alias CheckboxColumnProps =
     { get : RowData -> Bool
     , set : RowData -> Bool -> RowData
@@ -75,5 +86,5 @@ type alias RowData =
     , reviewCount : String
     , notes : String
     , category : String
-    , decision : String
+    , decision : ( String, Maybe String )
     }
