@@ -3,7 +3,6 @@ module Table.Update exposing (update)
 import Table.Messages exposing (..)
 import MainModel exposing (..)
 import List.Extra exposing (updateIf)
-import Tuple exposing (first, second)
 
 
 update : Msg -> TableState -> TableState
@@ -158,7 +157,7 @@ update msg tableState =
 
         SortRows { id, subType } ->
             let
-                sortedByVals =
+                ( rows, sorting ) =
                     case subType of
                         DisplayColumn subType ->
                             sortComparable subType.get
@@ -196,8 +195,8 @@ update msg tableState =
                             ( sortByVal tableState.rows get True, Asc id )
             in
                 ({ tableState
-                    | rows = first sortedByVals
-                    , sorting = second sortedByVals
+                    | rows = rows
+                    , sorting = sorting
                  }
                 )
 
