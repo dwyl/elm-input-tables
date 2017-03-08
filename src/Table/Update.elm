@@ -1,19 +1,19 @@
 module Table.Update exposing (update)
 
-import Table.Messages exposing (..)
-import Table.Model exposing (..)
+import MainMessages exposing (..)
+import MainModel exposing (..)
 import List.Extra exposing (updateIf)
 import Tuple exposing (first, second)
 
 
-update : TableMsg rowData -> State rowData -> ( State rowData, Cmd TableMsg )
-update msg state =
+update : Msg -> TableState -> TableState
+update msg tableState =
     case msg of
         UpdateCellValue setter rowId value ->
-            ( { state | rows = setCellData state.rows setter rowId value }, Cmd.none )
+            ({ tableState | rows = setCellData tableState.rows setter rowId value })
 
         UpdateBoolCellValue setter rowId ->
-            ( { state | rows = setCellData state.rows setter rowId True }, Cmd.none )
+            ({ tableState | rows = setCellData tableState.rows setter rowId True })
 
         ToggleCellDropdown rowId columnId ->
             let
@@ -32,11 +32,10 @@ update msg state =
                         _ ->
                             column
             in
-                ( { state
+                ({ tableState
                     | columns =
-                        updateIfHasId columnId update state.columns
-                  }
-                , Cmd.none
+                        updateIfHasId columnId update tableState.columns
+                 }
                 )
 
         ViewDropdownChildren rowId columnId choice set ->
@@ -56,10 +55,9 @@ update msg state =
                         _ ->
                             column
             in
-                ( { state
-                    | columns = updateIfHasId columnId updateColumn state.columns
-                  }
-                , Cmd.none
+                ({ tableState
+                    | columns = updateIfHasId columnId updateColumn tableState.columns
+                 }
                 )
 
         SelectDropdownParent rowId columnId choice set ->
@@ -82,11 +80,10 @@ update msg state =
                 updateRow row =
                     { row | data = set row.data ( choice, Nothing ) }
             in
-                ( { state
-                    | columns = updateIfHasId columnId updateColumn state.columns
-                    , rows = updateIfHasId rowId updateRow state.rows
-                  }
-                , Cmd.none
+                ({ tableState
+                    | columns = updateIfHasId columnId updateColumn tableState.columns
+                    , rows = updateIfHasId rowId updateRow tableState.rows
+                 }
                 )
 
         SelectDropdownChild rowId columnId choice subChoice set ->
@@ -109,59 +106,54 @@ update msg state =
                 updateRow row =
                     { row | data = set row.data ( choice, Just subChoice ) }
             in
-                ( { state
-                    | columns = updateIfHasId columnId updateColumn state.columns
-                    , rows = updateIfHasId rowId updateRow state.rows
-                  }
-                , Cmd.none
+                ({ tableState
+                    | columns = updateIfHasId columnId updateColumn tableState.columns
+                    , rows = updateIfHasId rowId updateRow tableState.rows
+                 }
                 )
 
         UpdateSearchText value ->
-            ( { state | searchText = value }, Cmd.none )
+            ({ tableState | searchText = value })
 
         UpdateColumnFilterText columnId value ->
-            ( { state
+            ({ tableState
                 | columns =
-                    updateFilterText columnId value state.columns
-              }
-            , Cmd.none
+                    updateFilterText columnId value tableState.columns
+             }
             )
 
         SwitchColumnCheckboxFilter columnId newFilterState ->
-            ( { state
+            ({ tableState
                 | columns =
-                    switchCheckboxFilter columnId newFilterState state.columns
-              }
-            , Cmd.none
+                    switchCheckboxFilter columnId newFilterState tableState.columns
+             }
             )
 
         ToggleRowCheckbox rowId ->
-            ( { state
+            ({ tableState
                 | rows =
-                    updateIfHasId rowId (\r -> { r | checked = not r.checked }) state.rows
-              }
-            , Cmd.none
+                    updateIfHasId rowId (\r -> { r | checked = not r.checked }) tableState.rows
+             }
             )
 
         ToggleAllRowsCheckboxes ->
             let
                 allChecked =
-                    List.all .checked state.rows
+                    List.all .checked tableState.rows
 
                 newRows =
-                    List.map (\r -> { r | checked = not allChecked }) state.rows
+                    List.map (\r -> { r | checked = not allChecked }) tableState.rows
             in
-                ( { state | rows = newRows }, Cmd.none )
+                ({ tableState | rows = newRows })
 
         ToggleChooseVisibleColumnsUi ->
-            ( { state | showVisibleColumnsUi = not state.showVisibleColumnsUi }, Cmd.none )
+            ({ tableState | showVisibleColumnsUi = not tableState.showVisibleColumnsUi })
 
         ToggleColumnVisibility columndId ->
-            ( { state
+            ({ tableState
                 | columns =
-                    updateIfHasId columndId (\c -> { c | visible = not c.visible }) state.columns
-              }
-            , Cmd.none
+                    updateIfHasId columndId (\c -> { c | visible = not c.visible }) tableState.columns
+             }
             )
 
         SortRows { id, subType } ->
@@ -193,21 +185,20 @@ update msg state =
                         "0"
 
                 sortComparable get =
-                    case state.sorting of
+                    case tableState.sorting of
                         Asc currentSortId ->
                             if currentSortId == id then
-                                ( sortByVal state.rows get False, Desc id )
+                                ( sortByVal tableState.rows get False, Desc id )
                             else
-                                ( sortByVal state.rows get True, Asc id )
+                                ( sortByVal tableState.rows get True, Asc id )
 
                         _ ->
-                            ( sortByVal state.rows get True, Asc id )
+                            ( sortByVal tableState.rows get True, Asc id )
             in
-                ( { state
+                ({ tableState
                     | rows = first sortedByVals
                     , sorting = second sortedByVals
-                  }
-                , Cmd.none
+                 }
                 )
 
         TableClick ->
@@ -227,10 +218,10 @@ update msg state =
                         _ ->
                             column
             in
-                ( { state | columns = List.map removeFocus state.columns }, Cmd.none )
+                ({ tableState | columns = List.map removeFocus tableState.columns })
 
 
-setCellData : List (Row rowData) -> (rowData -> a -> rowData) -> Int -> a -> List (Row rowData)
+setCellData : List Row -> (RowData -> a -> RowData) -> Int -> a -> List Row
 setCellData rows setter rowId value =
     let
         update row =
@@ -239,7 +230,7 @@ setCellData rows setter rowId value =
         updateIfHasId rowId update rows
 
 
-updateFilterText : Int -> String -> List (Column rowData) -> List (Column rowData)
+updateFilterText : Int -> String -> List Column -> List Column
 updateFilterText columnId value columns =
     let
         updateIfText column =
@@ -290,7 +281,7 @@ switchCheckboxFilter columnId newFilterState columns =
         updateIfHasId columnId (\c -> { c | subType = updateIfText c }) columns
 
 
-sortByVal : List (Row rowData) -> (rowData -> String) -> Bool -> List (Row rowData)
+sortByVal : List Row -> (RowData -> String) -> Bool -> List Row
 sortByVal rows getVal ascending =
     let
         comparator row1 row2 =
