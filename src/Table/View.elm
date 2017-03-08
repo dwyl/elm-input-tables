@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Html.Keyed as Keyed
-import MainMessages exposing (..)
+import Table.Messages exposing (..)
 import MainModel exposing (..)
 import Table.RowFilter as RowFilter
 import Table.ViewCell as ViewCell

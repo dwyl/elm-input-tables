@@ -1,6 +1,6 @@
 module Table.Update exposing (update)
 
-import MainMessages exposing (..)
+import Table.Messages exposing (..)
 import MainModel exposing (..)
 import List.Extra exposing (updateIf)
 import Tuple exposing (first, second)

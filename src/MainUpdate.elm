@@ -1,6 +1,6 @@
 module MainUpdate exposing (update)
 
-import MainMessages exposing (..)
+import Table.Messages exposing (..)
 import MainModel exposing (..)
 import Table.Update
 
