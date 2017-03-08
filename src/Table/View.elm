@@ -13,7 +13,7 @@ import Table.ViewCell as ViewCell
 -- add tests for filtering
 
 
-view : Model -> Html Msg
+view : TableState -> Html Msg
 view model =
     let
         visibleColumns =
@@ -43,7 +43,7 @@ view model =
             ]
 
 
-viewChooseVisibleColumnButtons : Model -> Html Msg
+viewChooseVisibleColumnButtons : TableState -> Html Msg
 viewChooseVisibleColumnButtons model =
     div [ hidden (not model.showVisibleColumnsUi) ]
         (List.map
@@ -57,12 +57,12 @@ viewChooseVisibleColumnButton message column =
     button [ onClick (message column.id) ] [ text column.name ]
 
 
-viewHeaders : Model -> List (Html Msg)
+viewHeaders : TableState -> List (Html Msg)
 viewHeaders model =
     [ tr [] ((checkboxHeader model) :: (viewOtherHeaders model)) ]
 
 
-checkboxHeader : Model -> Html Msg
+checkboxHeader : TableState -> Html Msg
 checkboxHeader model =
     th [] [ checkbox ToggleAllRowsCheckboxes (List.all .checked model.rows) ]
 
@@ -72,7 +72,7 @@ checkbox message checkedVal =
     input [ type_ "checkbox", checked checkedVal, onClick message ] []
 
 
-viewOtherHeaders : Model -> List (Html Msg)
+viewOtherHeaders : TableState -> List (Html Msg)
 viewOtherHeaders model =
     List.filterMap (viewHeader model.sorting) model.columns
 

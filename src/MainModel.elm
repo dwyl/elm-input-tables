@@ -2,6 +2,11 @@ module MainModel exposing (..)
 
 
 type alias Model =
+    { tableState : TableState
+    }
+
+
+type alias TableState =
     { columns : List Column
     , rows : List Row
     , searchText : String

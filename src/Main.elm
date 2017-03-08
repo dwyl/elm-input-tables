@@ -9,6 +9,11 @@ import MainView
 
 initialModel : Model
 initialModel =
+    { tableState = tableState }
+
+
+tableState : TableState
+tableState =
     { columns =
         [ Column 2 "title" True (DisplayColumn (DisplayColumnProps .title ""))
         , Column 3 "author" True (DisplayColumn (DisplayColumnProps .author ""))

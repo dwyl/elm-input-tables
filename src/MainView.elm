@@ -3,5 +3,5 @@ module MainView exposing (view)
 import Table.View
 
 
-view =
-    Table.View.view
+view model =
+    Table.View.view model.tableState

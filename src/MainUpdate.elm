@@ -8,226 +8,224 @@ import Tuple exposing (first, second)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        UpdateCellValue setter rowId value ->
-            ( { model | rows = setCellData model.rows setter rowId value }, Cmd.none )
+    let
+        tableState =
+            model.tableState
 
-        UpdateBoolCellValue setter rowId ->
-            ( { model | rows = setCellData model.rows setter rowId True }, Cmd.none )
+        newTableState =
+            case msg of
+                UpdateCellValue setter rowId value ->
+                    ({ tableState | rows = setCellData tableState.rows setter rowId value })
 
-        ToggleCellDropdown rowId columnId ->
-            let
-                update column =
-                    case column.subType of
-                        SubDropdownColumn props ->
-                            let
-                                newProps =
-                                    { props
-                                        | focussedRowId = Just rowId
-                                        , focussedOption = Nothing
-                                    }
-                            in
-                                { column | subType = SubDropdownColumn newProps }
+                UpdateBoolCellValue setter rowId ->
+                    ({ tableState | rows = setCellData tableState.rows setter rowId True })
 
-                        _ ->
-                            column
-            in
-                ( { model
-                    | columns =
-                        updateIfHasId columnId update model.columns
-                  }
-                , Cmd.none
-                )
+                ToggleCellDropdown rowId columnId ->
+                    let
+                        update column =
+                            case column.subType of
+                                SubDropdownColumn props ->
+                                    let
+                                        newProps =
+                                            { props
+                                                | focussedRowId = Just rowId
+                                                , focussedOption = Nothing
+                                            }
+                                    in
+                                        { column | subType = SubDropdownColumn newProps }
 
-        ViewDropdownChildren rowId columnId choice set ->
-            let
-                updateColumn column =
-                    case column.subType of
-                        SubDropdownColumn props ->
-                            let
-                                newProps =
-                                    { props
-                                        | focussedRowId = Just rowId
-                                        , focussedOption = Just choice
-                                    }
-                            in
-                                { column | subType = SubDropdownColumn newProps }
+                                _ ->
+                                    column
+                    in
+                        ({ tableState
+                            | columns =
+                                updateIfHasId columnId update tableState.columns
+                         }
+                        )
 
-                        _ ->
-                            column
-            in
-                ( { model
-                    | columns = updateIfHasId columnId updateColumn model.columns
-                  }
-                , Cmd.none
-                )
+                ViewDropdownChildren rowId columnId choice set ->
+                    let
+                        updateColumn column =
+                            case column.subType of
+                                SubDropdownColumn props ->
+                                    let
+                                        newProps =
+                                            { props
+                                                | focussedRowId = Just rowId
+                                                , focussedOption = Just choice
+                                            }
+                                    in
+                                        { column | subType = SubDropdownColumn newProps }
 
-        SelectDropdownParent rowId columnId choice set ->
-            let
-                updateColumn column =
-                    case column.subType of
-                        SubDropdownColumn props ->
-                            let
-                                newProps =
-                                    { props
-                                        | focussedRowId = Nothing
-                                        , focussedOption = Nothing
-                                    }
-                            in
-                                { column | subType = SubDropdownColumn newProps }
+                                _ ->
+                                    column
+                    in
+                        ({ tableState
+                            | columns = updateIfHasId columnId updateColumn tableState.columns
+                         }
+                        )
 
-                        _ ->
-                            column
+                SelectDropdownParent rowId columnId choice set ->
+                    let
+                        updateColumn column =
+                            case column.subType of
+                                SubDropdownColumn props ->
+                                    let
+                                        newProps =
+                                            { props
+                                                | focussedRowId = Nothing
+                                                , focussedOption = Nothing
+                                            }
+                                    in
+                                        { column | subType = SubDropdownColumn newProps }
 
-                updateRow row =
-                    { row | data = set row.data ( choice, Nothing ) }
-            in
-                ( { model
-                    | columns = updateIfHasId columnId updateColumn model.columns
-                    , rows = updateIfHasId rowId updateRow model.rows
-                  }
-                , Cmd.none
-                )
+                                _ ->
+                                    column
 
-        SelectDropdownChild rowId columnId choice subChoice set ->
-            let
-                updateColumn column =
-                    case column.subType of
-                        SubDropdownColumn props ->
-                            let
-                                newProps =
-                                    { props
-                                        | focussedRowId = Nothing
-                                        , focussedOption = Nothing
-                                    }
-                            in
-                                { column | subType = SubDropdownColumn newProps }
+                        updateRow row =
+                            { row | data = set row.data ( choice, Nothing ) }
+                    in
+                        ({ tableState
+                            | columns = updateIfHasId columnId updateColumn tableState.columns
+                            , rows = updateIfHasId rowId updateRow tableState.rows
+                         }
+                        )
 
-                        _ ->
-                            column
+                SelectDropdownChild rowId columnId choice subChoice set ->
+                    let
+                        updateColumn column =
+                            case column.subType of
+                                SubDropdownColumn props ->
+                                    let
+                                        newProps =
+                                            { props
+                                                | focussedRowId = Nothing
+                                                , focussedOption = Nothing
+                                            }
+                                    in
+                                        { column | subType = SubDropdownColumn newProps }
 
-                updateRow row =
-                    { row | data = set row.data ( choice, Just subChoice ) }
-            in
-                ( { model
-                    | columns = updateIfHasId columnId updateColumn model.columns
-                    , rows = updateIfHasId rowId updateRow model.rows
-                  }
-                , Cmd.none
-                )
+                                _ ->
+                                    column
 
-        UpdateSearchText value ->
-            ( { model | searchText = value }, Cmd.none )
+                        updateRow row =
+                            { row | data = set row.data ( choice, Just subChoice ) }
+                    in
+                        ({ tableState
+                            | columns = updateIfHasId columnId updateColumn tableState.columns
+                            , rows = updateIfHasId rowId updateRow tableState.rows
+                         }
+                        )
 
-        UpdateColumnFilterText columnId value ->
-            ( { model
-                | columns =
-                    updateFilterText columnId value model.columns
-              }
-            , Cmd.none
-            )
+                UpdateSearchText value ->
+                    ({ tableState | searchText = value })
 
-        SwitchColumnCheckboxFilter columnId newFilterState ->
-            ( { model
-                | columns =
-                    switchCheckboxFilter columnId newFilterState model.columns
-              }
-            , Cmd.none
-            )
+                UpdateColumnFilterText columnId value ->
+                    ({ tableState
+                        | columns =
+                            updateFilterText columnId value tableState.columns
+                     }
+                    )
 
-        ToggleRowCheckbox rowId ->
-            ( { model
-                | rows =
-                    updateIfHasId rowId (\r -> { r | checked = not r.checked }) model.rows
-              }
-            , Cmd.none
-            )
+                SwitchColumnCheckboxFilter columnId newFilterState ->
+                    ({ tableState
+                        | columns =
+                            switchCheckboxFilter columnId newFilterState tableState.columns
+                     }
+                    )
 
-        ToggleAllRowsCheckboxes ->
-            let
-                allChecked =
-                    List.all .checked model.rows
+                ToggleRowCheckbox rowId ->
+                    ({ tableState
+                        | rows =
+                            updateIfHasId rowId (\r -> { r | checked = not r.checked }) tableState.rows
+                     }
+                    )
 
-                newRows =
-                    List.map (\r -> { r | checked = not allChecked }) model.rows
-            in
-                ( { model | rows = newRows }, Cmd.none )
+                ToggleAllRowsCheckboxes ->
+                    let
+                        allChecked =
+                            List.all .checked tableState.rows
 
-        ToggleChooseVisibleColumnsUi ->
-            ( { model | showVisibleColumnsUi = not model.showVisibleColumnsUi }, Cmd.none )
+                        newRows =
+                            List.map (\r -> { r | checked = not allChecked }) tableState.rows
+                    in
+                        ({ tableState | rows = newRows })
 
-        ToggleColumnVisibility columndId ->
-            ( { model
-                | columns =
-                    updateIfHasId columndId (\c -> { c | visible = not c.visible }) model.columns
-              }
-            , Cmd.none
-            )
+                ToggleChooseVisibleColumnsUi ->
+                    ({ tableState | showVisibleColumnsUi = not tableState.showVisibleColumnsUi })
 
-        SortRows { id, subType } ->
-            let
-                sortedByVals =
-                    case subType of
-                        DisplayColumn subType ->
-                            sortComparable subType.get
+                ToggleColumnVisibility columndId ->
+                    ({ tableState
+                        | columns =
+                            updateIfHasId columndId (\c -> { c | visible = not c.visible }) tableState.columns
+                     }
+                    )
 
-                        TextColumn subType ->
-                            sortComparable subType.get
+                SortRows { id, subType } ->
+                    let
+                        sortedByVals =
+                            case subType of
+                                DisplayColumn subType ->
+                                    sortComparable subType.get
 
-                        DropdownColumn subType ->
-                            sortComparable subType.get
+                                TextColumn subType ->
+                                    sortComparable subType.get
 
-                        SubDropdownColumn subType ->
-                            sortComparable (subType.get >> convertSubDropdownToString)
+                                DropdownColumn subType ->
+                                    sortComparable subType.get
 
-                        CheckboxColumn subType ->
-                            sortComparable (subType.get >> converBoolToString)
+                                SubDropdownColumn subType ->
+                                    sortComparable (subType.get >> convertSubDropdownToString)
 
-                convertSubDropdownToString ( choice, subChoice ) =
-                    choice ++ (Maybe.withDefault "" subChoice)
+                                CheckboxColumn subType ->
+                                    sortComparable (subType.get >> converBoolToString)
 
-                converBoolToString bool =
-                    if bool then
-                        "1"
-                    else
-                        "0"
+                        convertSubDropdownToString ( choice, subChoice ) =
+                            choice ++ (Maybe.withDefault "" subChoice)
 
-                sortComparable get =
-                    case model.sorting of
-                        Asc currentSortId ->
-                            if currentSortId == id then
-                                ( sortByVal model.rows get False, Desc id )
+                        converBoolToString bool =
+                            if bool then
+                                "1"
                             else
-                                ( sortByVal model.rows get True, Asc id )
+                                "0"
 
-                        _ ->
-                            ( sortByVal model.rows get True, Asc id )
-            in
-                ( { model
-                    | rows = first sortedByVals
-                    , sorting = second sortedByVals
-                  }
-                , Cmd.none
-                )
+                        sortComparable get =
+                            case tableState.sorting of
+                                Asc currentSortId ->
+                                    if currentSortId == id then
+                                        ( sortByVal tableState.rows get False, Desc id )
+                                    else
+                                        ( sortByVal tableState.rows get True, Asc id )
 
-        TableClick ->
-            let
-                removeFocus column =
-                    case column.subType of
-                        SubDropdownColumn props ->
-                            let
-                                newProps =
-                                    { props
-                                        | focussedRowId = Nothing
-                                        , focussedOption = Nothing
-                                    }
-                            in
-                                { column | subType = SubDropdownColumn newProps }
+                                _ ->
+                                    ( sortByVal tableState.rows get True, Asc id )
+                    in
+                        ({ tableState
+                            | rows = first sortedByVals
+                            , sorting = second sortedByVals
+                         }
+                        )
 
-                        _ ->
-                            column
-            in
-                ( { model | columns = List.map removeFocus model.columns }, Cmd.none )
+                TableClick ->
+                    let
+                        removeFocus column =
+                            case column.subType of
+                                SubDropdownColumn props ->
+                                    let
+                                        newProps =
+                                            { props
+                                                | focussedRowId = Nothing
+                                                , focussedOption = Nothing
+                                            }
+                                    in
+                                        { column | subType = SubDropdownColumn newProps }
+
+                                _ ->
+                                    column
+                    in
+                        ({ tableState | columns = List.map removeFocus tableState.columns })
+    in
+        ( { model | tableState = newTableState }, Cmd.none )
 
 
 setCellData : List Row -> (RowData -> a -> RowData) -> Int -> a -> List Row
