@@ -2,12 +2,12 @@ module Table.ViewCell exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick, onInput, onMouseEnter)
-import MainMessages exposing (..)
+import Html.Events exposing (onClick, onInput, onMouseEnter, onWithOptions)
+import Json.Decode as Json
 import MainModel exposing (..)
+import MainMessages exposing (..)
 
 
-view : Row -> Column -> Maybe (Html Msg)
 view row column =
     if column.visible then
         Just
@@ -100,7 +100,7 @@ view row column =
                             viewSubChoice choice subChoice =
                                 li [] [ a [ onClick (SelectDropdownChild row.id column.id choice subChoice props.set) ] [ text subChoice ] ]
                         in
-                            [ a [ class "btn dropdown-toggle", onClick (ToggleCellDropdown row.id column.id) ]
+                            [ a [ class "btn dropdown-toggle", onClickNoPropagate (ToggleCellDropdown row.id column.id) ]
                                 [ text buttonText, span [ class "caret" ] [] ]
                             , ul
                                 [ style
@@ -126,3 +126,9 @@ view row column =
             )
     else
         Nothing
+
+
+onClickNoPropagate msg =
+    onWithOptions "click"
+        { stopPropagation = True, preventDefault = False }
+        (Json.succeed msg)

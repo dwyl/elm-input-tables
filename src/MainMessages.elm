@@ -18,3 +18,4 @@ type Msg
     | ToggleChooseVisibleColumnsUi
     | ToggleColumnVisibility Int
     | SortRows Column
+    | TableClick

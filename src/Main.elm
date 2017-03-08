@@ -13,7 +13,7 @@ initialModel =
         [ Column 2 "title" True (DisplayColumn (DisplayColumnProps .title ""))
         , Column 3 "author" True (DisplayColumn (DisplayColumnProps .author ""))
           -- , Column 4 "Review Count" True (DisplayColumn (DisplayColumnProps .reviewCount ""))
-        , Column 5 "program Code" True (TextColumn (TextColumnProps .programCode (\d v -> { d | notes = v }) "" False))
+        , Column 5 "program Code" True (TextColumn (TextColumnProps .programCode (\d v -> { d | programCode = v }) "" False))
         , Column 8
             "decision"
             True

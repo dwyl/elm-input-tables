@@ -22,7 +22,7 @@ view model =
         visibleRows =
             RowFilter.filter model.rows visibleColumns model.searchText
     in
-        div [ class "container" ]
+        div [ class "container", onClick TableClick ]
             [ input
                 [ placeholder "Search"
                 , value model.searchText

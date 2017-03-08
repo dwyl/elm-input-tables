@@ -1,19 +1,19 @@
-module MainUpdate exposing (update)
+module Table.Update exposing (update)
 
-import MainMessages exposing (..)
-import MainModel exposing (..)
+import Table.Messages exposing (..)
+import Table.Model exposing (..)
 import List.Extra exposing (updateIf)
 import Tuple exposing (first, second)
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : TableMsg rowData -> State rowData -> ( State rowData, Cmd TableMsg )
+update msg state =
     case msg of
         UpdateCellValue setter rowId value ->
-            ( { model | rows = setCellData model.rows setter rowId value }, Cmd.none )
+            ( { state | rows = setCellData state.rows setter rowId value }, Cmd.none )
 
         UpdateBoolCellValue setter rowId ->
-            ( { model | rows = setCellData model.rows setter rowId True }, Cmd.none )
+            ( { state | rows = setCellData state.rows setter rowId True }, Cmd.none )
 
         ToggleCellDropdown rowId columnId ->
             let
@@ -32,9 +32,9 @@ update msg model =
                         _ ->
                             column
             in
-                ( { model
+                ( { state
                     | columns =
-                        updateIfHasId columnId update model.columns
+                        updateIfHasId columnId update state.columns
                   }
                 , Cmd.none
                 )
@@ -56,8 +56,8 @@ update msg model =
                         _ ->
                             column
             in
-                ( { model
-                    | columns = updateIfHasId columnId updateColumn model.columns
+                ( { state
+                    | columns = updateIfHasId columnId updateColumn state.columns
                   }
                 , Cmd.none
                 )
@@ -82,9 +82,9 @@ update msg model =
                 updateRow row =
                     { row | data = set row.data ( choice, Nothing ) }
             in
-                ( { model
-                    | columns = updateIfHasId columnId updateColumn model.columns
-                    , rows = updateIfHasId rowId updateRow model.rows
+                ( { state
+                    | columns = updateIfHasId columnId updateColumn state.columns
+                    , rows = updateIfHasId rowId updateRow state.rows
                   }
                 , Cmd.none
                 )
@@ -109,36 +109,36 @@ update msg model =
                 updateRow row =
                     { row | data = set row.data ( choice, Just subChoice ) }
             in
-                ( { model
-                    | columns = updateIfHasId columnId updateColumn model.columns
-                    , rows = updateIfHasId rowId updateRow model.rows
+                ( { state
+                    | columns = updateIfHasId columnId updateColumn state.columns
+                    , rows = updateIfHasId rowId updateRow state.rows
                   }
                 , Cmd.none
                 )
 
         UpdateSearchText value ->
-            ( { model | searchText = value }, Cmd.none )
+            ( { state | searchText = value }, Cmd.none )
 
         UpdateColumnFilterText columnId value ->
-            ( { model
+            ( { state
                 | columns =
-                    updateFilterText columnId value model.columns
+                    updateFilterText columnId value state.columns
               }
             , Cmd.none
             )
 
         SwitchColumnCheckboxFilter columnId newFilterState ->
-            ( { model
+            ( { state
                 | columns =
-                    switchCheckboxFilter columnId newFilterState model.columns
+                    switchCheckboxFilter columnId newFilterState state.columns
               }
             , Cmd.none
             )
 
         ToggleRowCheckbox rowId ->
-            ( { model
+            ( { state
                 | rows =
-                    updateIfHasId rowId (\r -> { r | checked = not r.checked }) model.rows
+                    updateIfHasId rowId (\r -> { r | checked = not r.checked }) state.rows
               }
             , Cmd.none
             )
@@ -146,20 +146,20 @@ update msg model =
         ToggleAllRowsCheckboxes ->
             let
                 allChecked =
-                    List.all .checked model.rows
+                    List.all .checked state.rows
 
                 newRows =
-                    List.map (\r -> { r | checked = not allChecked }) model.rows
+                    List.map (\r -> { r | checked = not allChecked }) state.rows
             in
-                ( { model | rows = newRows }, Cmd.none )
+                ( { state | rows = newRows }, Cmd.none )
 
         ToggleChooseVisibleColumnsUi ->
-            ( { model | showVisibleColumnsUi = not model.showVisibleColumnsUi }, Cmd.none )
+            ( { state | showVisibleColumnsUi = not state.showVisibleColumnsUi }, Cmd.none )
 
         ToggleColumnVisibility columndId ->
-            ( { model
+            ( { state
                 | columns =
-                    updateIfHasId columndId (\c -> { c | visible = not c.visible }) model.columns
+                    updateIfHasId columndId (\c -> { c | visible = not c.visible }) state.columns
               }
             , Cmd.none
             )
@@ -193,17 +193,17 @@ update msg model =
                         "0"
 
                 sortComparable get =
-                    case model.sorting of
+                    case state.sorting of
                         Asc currentSortId ->
                             if currentSortId == id then
-                                ( sortByVal model.rows get False, Desc id )
+                                ( sortByVal state.rows get False, Desc id )
                             else
-                                ( sortByVal model.rows get True, Asc id )
+                                ( sortByVal state.rows get True, Asc id )
 
                         _ ->
-                            ( sortByVal model.rows get True, Asc id )
+                            ( sortByVal state.rows get True, Asc id )
             in
-                ( { model
+                ( { state
                     | rows = first sortedByVals
                     , sorting = second sortedByVals
                   }
@@ -227,10 +227,10 @@ update msg model =
                         _ ->
                             column
             in
-                ( { model | columns = List.map removeFocus model.columns }, Cmd.none )
+                ( { state | columns = List.map removeFocus state.columns }, Cmd.none )
 
 
-setCellData : List Row -> (RowData -> a -> RowData) -> Int -> a -> List Row
+setCellData : List (Row rowData) -> (rowData -> a -> rowData) -> Int -> a -> List (Row rowData)
 setCellData rows setter rowId value =
     let
         update row =
@@ -239,7 +239,7 @@ setCellData rows setter rowId value =
         updateIfHasId rowId update rows
 
 
-updateFilterText : Int -> String -> List Column -> List Column
+updateFilterText : Int -> String -> List (Column rowData) -> List (Column rowData)
 updateFilterText columnId value columns =
     let
         updateIfText column =
@@ -290,7 +290,7 @@ switchCheckboxFilter columnId newFilterState columns =
         updateIfHasId columnId (\c -> { c | subType = updateIfText c }) columns
 
 
-sortByVal : List Row -> (RowData -> String) -> Bool -> List Row
+sortByVal : List (Row rowData) -> (rowData -> String) -> Bool -> List (Row rowData)
 sortByVal rows getVal ascending =
     let
         comparator row1 row2 =
