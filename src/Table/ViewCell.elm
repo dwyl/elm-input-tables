@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput, onMouseEnter, onWithOptions)
 import Json.Decode as Json
-import MainModel exposing (..)
+import Table.Model exposing (..)
 import Table.Messages exposing (..)
 
 

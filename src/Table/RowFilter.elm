@@ -1,17 +1,19 @@
 module Table.RowFilter exposing (filter)
 
 import String exposing (contains, toLower, length)
-import MainModel exposing (..)
+import Table.Model exposing (..)
 
 
-filter : List Row -> List Column -> String -> List Row
-filter rows columns searchText =
+filter : List Row -> List Column -> String -> (Row -> Bool) -> List Row
+filter rows columns searchText externalFilter =
     let
         allColumnsPassFilterAndSearch row =
             List.any (columnPassesSearch searchText row) columns
                 && List.all (columnPassesFilter row) columns
     in
-        List.filter allColumnsPassFilterAndSearch rows
+        rows
+            |> List.filter externalFilter
+            |> List.filter allColumnsPassFilterAndSearch
 
 
 columnPassesSearch : String -> Row -> Column -> Bool

@@ -5,7 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Html.Keyed as Keyed
 import Table.Messages exposing (..)
-import MainModel exposing (..)
+import Table.Model exposing (..)
 import Table.RowFilter as RowFilter
 import Table.ViewCell as ViewCell
 
@@ -20,7 +20,7 @@ view model =
             List.filter .visible model.columns
 
         visibleRows =
-            RowFilter.filter model.rows visibleColumns model.searchText
+            RowFilter.filter model.rows visibleColumns model.searchText model.externalFilter
     in
         div [ class "container", onClick TableClick ]
             [ input

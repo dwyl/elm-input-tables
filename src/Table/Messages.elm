@@ -1,6 +1,6 @@
 module Table.Messages exposing (..)
 
-import MainModel exposing (..)
+import Table.Model exposing (..)
 
 
 type TableMsg
