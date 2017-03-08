@@ -5,7 +5,7 @@ import MainModel exposing (..)
 import List.Extra exposing (updateIf)
 
 
-update : Msg -> TableState -> TableState
+update : TableMsg -> TableState -> TableState
 update msg tableState =
     case msg of
         UpdateCellValue setter rowId value ->

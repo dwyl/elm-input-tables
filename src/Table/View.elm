@@ -13,7 +13,7 @@ import Table.ViewCell as ViewCell
 -- add tests for filtering
 
 
-view : TableState -> Html Msg
+view : TableState -> Html TableMsg
 view model =
     let
         visibleColumns =
@@ -43,7 +43,7 @@ view model =
             ]
 
 
-viewChooseVisibleColumnButtons : TableState -> Html Msg
+viewChooseVisibleColumnButtons : TableState -> Html TableMsg
 viewChooseVisibleColumnButtons model =
     div [ hidden (not model.showVisibleColumnsUi) ]
         (List.map
@@ -52,32 +52,32 @@ viewChooseVisibleColumnButtons model =
         )
 
 
-viewChooseVisibleColumnButton : (Int -> Msg) -> Column -> Html Msg
+viewChooseVisibleColumnButton : (Int -> TableMsg) -> Column -> Html TableMsg
 viewChooseVisibleColumnButton message column =
     button [ onClick (message column.id) ] [ text column.name ]
 
 
-viewHeaders : TableState -> List (Html Msg)
+viewHeaders : TableState -> List (Html TableMsg)
 viewHeaders model =
     [ tr [] ((checkboxHeader model) :: (viewOtherHeaders model)) ]
 
 
-checkboxHeader : TableState -> Html Msg
+checkboxHeader : TableState -> Html TableMsg
 checkboxHeader model =
     th [] [ checkbox ToggleAllRowsCheckboxes (List.all .checked model.rows) ]
 
 
-checkbox : Msg -> Bool -> Html Msg
+checkbox : TableMsg -> Bool -> Html TableMsg
 checkbox message checkedVal =
     input [ type_ "checkbox", checked checkedVal, onClick message ] []
 
 
-viewOtherHeaders : TableState -> List (Html Msg)
+viewOtherHeaders : TableState -> List (Html TableMsg)
 viewOtherHeaders model =
     List.filterMap (viewHeader model.sorting) model.columns
 
 
-viewHeader : Sorting -> Column -> Maybe (Html Msg)
+viewHeader : Sorting -> Column -> Maybe (Html TableMsg)
 viewHeader sorting column =
     if column.visible then
         let
@@ -153,7 +153,7 @@ viewHeader sorting column =
         Nothing
 
 
-viewTableRow : List Column -> Row -> ( String, Html Msg )
+viewTableRow : List Column -> Row -> ( String, Html TableMsg )
 viewTableRow columns row =
     ( (toString row.id), tr [] ((checkboxCell row) :: (viewCells columns row)) )
 

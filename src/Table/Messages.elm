@@ -3,7 +3,7 @@ module Table.Messages exposing (..)
 import MainModel exposing (..)
 
 
-type Msg
+type TableMsg
     = UpdateCellValue (RowData -> String -> RowData) Int String
     | UpdateBoolCellValue (RowData -> Bool -> RowData) Int
     | ToggleCellDropdown Int Int

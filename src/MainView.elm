@@ -1,7 +1,9 @@
 module MainView exposing (view)
 
+import Html
+import MainMessages
 import Table.View
 
 
 view model =
-    Table.View.view model.tableState
+    Html.map MainMessages.Table (Table.View.view model.tableState)

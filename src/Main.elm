@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Html
-import Table.Messages exposing (..)
+import MainMessages exposing (..)
 import MainModel exposing (..)
 import MainUpdate
 import MainView
