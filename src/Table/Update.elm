@@ -8,10 +8,10 @@ import List.Extra exposing (updateIf)
 update : TableMsg rowData -> TableState rowData -> TableState rowData
 update msg tableState =
     case msg of
-        UpdateCellValue setter rowId value ->
+        SetCellValue setter rowId value ->
             ({ tableState | rows = setCellData tableState.rows setter rowId value })
 
-        UpdateBoolCellValue setter rowId ->
+        SetBoolCellValue setter rowId ->
             ({ tableState | rows = setCellData tableState.rows setter rowId True })
 
         ToggleCellDropdown rowId columnId ->
@@ -111,10 +111,10 @@ update msg tableState =
                  }
                 )
 
-        UpdateSearchText value ->
+        SetSearchText value ->
             ({ tableState | searchText = value })
 
-        UpdateColumnFilterText columnId value ->
+        SetColumnFilterText columnId value ->
             ({ tableState
                 | columns =
                     updateFilterText columnId value tableState.columns

@@ -23,7 +23,7 @@ view row column =
                            else
                             input
                           )
-                            [ onInput (UpdateCellValue props.set row.id)
+                            [ onInput (SetCellValue props.set row.id)
                             , value (props.get row.data)
                             ]
                             []
@@ -37,7 +37,7 @@ view row column =
                         td [ class "table-cell table-cell--control" ]
                             [ select
                                 [ class "table-cell__control"
-                                , onInput (UpdateCellValue props.set row.id)
+                                , onInput (SetCellValue props.set row.id)
                                 ]
                                 (List.map viewOption props.options)
                             ]
@@ -113,7 +113,7 @@ view row column =
                         [ input
                             [ type_ "checkbox"
                             , checked (props.get row.data)
-                            , onClick (UpdateBoolCellValue props.set row.id)
+                            , onClick (SetBoolCellValue props.set row.id)
                             ]
                             []
                         ]

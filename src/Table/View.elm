@@ -28,7 +28,7 @@ view tableState =
                     [ placeholder "Search"
                     , class "table__search"
                     , value tableState.searchText
-                    , onInput UpdateSearchText
+                    , onInput SetSearchText
                     ]
                     []
                 , button
@@ -88,7 +88,7 @@ viewHeader sorting column =
                 input
                     [ placeholder "Filter"
                     , value config.filter
-                    , onInput (UpdateColumnFilterText column.id)
+                    , onInput (SetColumnFilterText column.id)
                     ]
                     []
 
