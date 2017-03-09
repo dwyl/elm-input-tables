@@ -21,6 +21,12 @@ view tableState =
 
         visibleRows =
             RowFilter.filter tableState.rows visibleColumns tableState.searchText tableState.externalFilter
+
+        tableButtonDropdownClass =
+            if tableState.showVisibleColumnsUi then
+                "table__button-dropdown table__button-dropdown--active"
+            else
+                "table__button-dropdown"
     in
         div [ onClick TableClick ]
             [ div [ class "table__controls-wrapper" ]
@@ -32,7 +38,7 @@ view tableState =
                     ]
                     []
                 , button
-                    [ class "table-bar__toggle-button button button--secondary", onClick ToggleChooseVisibleColumnsUi ]
+                    [ class tableButtonDropdownClass, onClick ToggleChooseVisibleColumnsUi ]
                     [ text "Choose Visible Columns" ]
                 , viewChooseVisibleColumnButtons tableState
                 ]
@@ -48,16 +54,26 @@ view tableState =
 
 viewChooseVisibleColumnButtons : TableState rowData -> Html (TableMsg rowData)
 viewChooseVisibleColumnButtons tableState =
-    div [ hidden (not tableState.showVisibleColumnsUi) ]
-        (List.map
-            (viewChooseVisibleColumnButton ToggleColumnVisibility)
-            tableState.columns
-        )
+    if tableState.showVisibleColumnsUi then
+        div [ class "bar bar--table" ]
+            (List.map
+                (viewChooseVisibleColumnButton ToggleColumnVisibility)
+                tableState.columns
+            )
+    else
+        text ""
 
 
 viewChooseVisibleColumnButton : (Int -> TableMsg rowData) -> Column rowData -> Html (TableMsg rowData)
 viewChooseVisibleColumnButton message column =
-    button [ onClick (message column.id) ] [ text column.name ]
+    let
+        extraClass =
+            if column.visible then
+                " bar__toggle--active"
+            else
+                ""
+    in
+        a [ class ("bar__toggle" ++ extraClass), onClick (message column.id) ] [ text column.name ]
 
 
 viewHeaders : TableState rowData -> List (Html (TableMsg rowData))
@@ -129,10 +145,10 @@ viewHeader sorting column =
                             "-"
         in
             Just
-                (th []
-                    [ div []
-                        [ span [] [ text column.name ]
-                        , button [ onClick (SortRows column) ] [ text sortingText ]
+                (th [ class "table-header" ]
+                    [ div [ class "table-header__sort-wrapper", onClick (SortRows column) ]
+                        [ span [ class "table-header__name" ] [ text column.name ]
+                        , i [ class "table-header__icon" ] [ text sortingText ]
                         ]
                     , (case column.subType of
                         DisplayColumn props ->

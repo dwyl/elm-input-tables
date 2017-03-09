@@ -134,8 +134,7 @@ pre {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     padding: 0.25rem 1rem;
-    margin-left: 1rem;
-    margin-top: 0.5rem;
+    margin: 0.75rem 1.5rem;
     font-size: 1rem;
     border: 1px solid #bdbdbd;
     border-radius: 3px;
@@ -157,6 +156,41 @@ pre {
       .table-bar__toggle-input:checked ~ .table-bar__toggle-button {
         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAAAXNSR0IArs4c6QAAANpJREFUOBFjYCAO1ACVKRCnlLAqDaCSn0C8mbBS4lTsAyr7D8UBxGnBrSoayTCQoQ+BmBu3cvwy/EDpF0AMcx2M7sSvDbfsFCyGgQz9BcTauLVhlzEGCv8FYpir0OmD2LVhF2UCCp/CYxjM8Hjs2jFFs4gwDGToKyAWxNSOKiIG5L4HYpgrCNEzULVj8haTYBjIMlA4m2EaAxFxAFKEXIRN/hxQHzPECATJCmReA2JsGogRy0UYBWFVUGAYyMKPQCwJMYqBQR7I+ArExLgEn5plMAM3UsEwmEXOAGbkm/bVMZcxAAAAAElFTkSuQmCC)
       }
+
+  .table__button-dropdown{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    float:right;
+    padding: 0.5rem 2.5rem;
+    margin: 0.75rem 1.5rem;
+    font-size: 0.8125rem;
+    background: none;
+    border: none;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAgCAYAAAB+ZAqzAAAAAXNSR0IArs4c6QAAAVhJREFUWAnNkK8vRWEch49hNpsgCIoiSZIm+hNEURQEURRFURTF20RNkiRFUWyCzYYZnod7bcxx7jnvr/Nsn3vfe877/Xyf3aqqqgF571l0qpbJU4/EdNHpkwM++/Kv6fLNLKcbUlpOB11+sMmv0mI6/MkZT0vJubuWFd68kNxy7nT3vxzyNreYOxuZ48YtySXnLneOxRa3com5qxXn3E4t547WrDLxSlLJ2e2OThwxlUrM7s7MM3lHYsvZaXcQ20zHFrMzmAkaLkgsObvsjMIaLW8kVM4Ou6JyTFuomB3RWaDxnnSVc9aOJOzQ2lXM2WRM0nxJ2so542xS1mlvK+ZMFk7YMq6cd7OxyKYH0iTnHe9mZY9tTWLeyc40G69InZzvvFOEDbbWifmuKKds/y3ns+IsYfBIRnKefdYL9rEYiXnuDTOYXA/jOZip4Iavgme+doddnoP5AEOdX53zUZ1XAAAAAElFTkSuQmCC);
+    background-size: 0.625rem 0.5rem; /* 10px 8px */
+    background-repeat: no-repeat;
+    background-position: 95%;
+    cursor: pointer;
+  }
+
+      .table__button-dropdown--active{
+        border-bottom: solid 2px #003066;
+      }
+
+  .table__button-dropdown:active,
+  .table__button-dropdown:focus{
+    outline:none;
+  }
+
+/* TABLE HEADER */
+
+.table-header__sort-wrapper{
+  
+}
+
+.table-header__name{}
+.table-header__icon{}
 
 /* TABLE CELL */
 .table-cell {
@@ -305,3 +339,33 @@ pre {
             background-color: #B2E3CE; /* light green */
             border-color: #808080;
         }
+
+.bar {
+  display: block;
+  margin: auto;
+  padding: 0 1rem;
+  max-width: 64rem;
+  text-align: left;
+  font-size: 1rem;
+}
+    .bar--table{
+      max-width: initial;
+      padding: 0.5rem 1.5rem;
+    }
+
+  .bar__toggle {
+    display: inline-block;
+    font-weight: 500;
+    padding: 0.5rem;
+    cursor: pointer;
+    margin: 0 0.125rem 0.625rem;
+    font-size: 0.875rem;
+  }
+      .bar__toggle--active {
+        text-decoration: none;
+        color: #ffffff;
+        background-color: #003066;
+      }
+      .bar__toggle--active:hover {
+        color: #ffffff;
+      }

@@ -52,7 +52,7 @@ tableState =
         ]
     , rows = initialRows
     , searchText = ""
-    , showVisibleColumnsUi = True
+    , showVisibleColumnsUi = False
     , sorting = NoSorting
     , externalFilter = (\r -> True)
     }
