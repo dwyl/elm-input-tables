@@ -59,9 +59,16 @@ type alias SubDropdownColumnProps rowData =
     { get : rowData -> ( String, Maybe String )
     , set : rowData -> ( String, Maybe String ) -> rowData
     , filter : String
-    , options : List ( String, List String )
+    , options : List SubDropdownOptionProps
     , focussedRowId : Maybe Int
     , focussedOption : Maybe String
+    }
+
+
+type alias SubDropdownOptionProps =
+    { parent : String
+    , childHeader : Maybe String
+    , children : List String
     }
 
 

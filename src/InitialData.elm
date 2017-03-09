@@ -36,11 +36,11 @@ tableState =
                     .decision
                     (\d ( val, sub ) -> { d | decision = ( val, sub ) })
                     ""
-                    [ ( "Pending", [] )
-                    , ( "Advance", [ "Rework", "Final" ] )
-                    , ( "Accept", [ "Oral", "Poster", "Workshop" ] )
-                    , ( "Withdraw", [] )
-                    , ( "Reject", [] )
+                    [ { parent = "Pending", childHeader = Nothing, children = [] }
+                    , { parent = "Advance", childHeader = Just "To: ", children = [ "Rework", "Final" ] }
+                    , { parent = "Accept", childHeader = Just "For: ", children = [ "Oral", "Poster", "Workshop" ] }
+                    , { parent = "Withdraw", childHeader = Nothing, children = [] }
+                    , { parent = "Reject", childHeader = Nothing, children = [] }
                     ]
                     Nothing
                     Nothing

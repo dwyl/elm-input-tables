@@ -65,42 +65,51 @@ view row column =
                                     else
                                         text ""
 
-                        viewOption ( choice, subChoices ) =
-                            if List.isEmpty subChoices then
+                        viewOption { parent, childHeader, children } =
+                            if List.isEmpty children then
                                 li
                                     [ class "table-cell__menu-item"
-                                    , onClick (SelectDropdownParent row.id column.id choice props.set)
+                                    , onClick (SelectDropdownParent row.id column.id parent props.set)
                                     ]
-                                    [ text choice ]
+                                    [ text parent ]
                             else
                                 (li
                                     [ class "table-cell__menu-item table-cell__menu-item--with-children"
-                                    , onMouseEnter (ViewDropdownChildren row.id column.id choice props.set)
-                                    , onClick (SelectDropdownParent row.id column.id choice props.set)
+                                    , onMouseEnter (ViewDropdownChildren row.id column.id parent props.set)
+                                    , onClick (SelectDropdownParent row.id column.id parent props.set)
                                     ]
-                                    [ text choice
+                                    [ text parent
                                     , (case props.focussedOption of
                                         Nothing ->
                                             text ""
 
                                         Just option ->
-                                            if option == choice then
-                                                ul
-                                                    [ class "table-cell__menu table-cell__menu--sub"
-                                                    ]
-                                                    ((li [ class "table-cell__menu-item" ] [ text "For: " ]) :: List.map (viewSubChoice choice) subChoices)
+                                            if option == parent then
+                                                let
+                                                    childHeaderLi =
+                                                        case childHeader of
+                                                            Just headerString ->
+                                                                li [ class "table-cell__menu-item" ] [ text headerString ]
+
+                                                            Nothing ->
+                                                                text ""
+                                                in
+                                                    ul
+                                                        [ class "table-cell__menu table-cell__menu--sub"
+                                                        ]
+                                                        (childHeaderLi :: List.map (viewSubChoice parent) children)
                                             else
                                                 text ""
                                       )
                                     ]
                                 )
 
-                        viewSubChoice choice subChoice =
+                        viewSubChoice parent child =
                             li
                                 [ class "table-cell__menu-item"
-                                , onClickNoPropagate (SelectDropdownChild row.id column.id choice subChoice props.set)
+                                , onClickNoPropagate (SelectDropdownChild row.id column.id parent child props.set)
                                 ]
-                                [ text subChoice ]
+                                [ text child ]
                     in
                         td [ class "table-cell table-cell--control" ]
                             [ a [ class "table-cell__control", onClickNoPropagate (ToggleCellDropdown row.id column.id) ]
