@@ -176,6 +176,7 @@ pre {
   .table-cell__control{
     display: block;
     width: 100%;
+    cursor: pointer;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -210,7 +211,11 @@ pre {
         left: 100%;
       }
 
-
+  .table-cell__checkbox-label{
+    display:block;
+    cursor:pointer;
+    padding:0.5rem;
+  }
   .table-cell__menu-item{
     position:relative;
     line-height: 2.5rem;

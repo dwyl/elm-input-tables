@@ -110,12 +110,14 @@ view row column =
 
                 CheckboxColumn props ->
                     td [ class "table-cell table-cell--control" ]
-                        [ input
-                            [ type_ "checkbox"
-                            , checked (props.get row.data)
-                            , onClick (SetBoolCellValue props.set row.id)
+                        [ label [ class "table-cell__checkbox-label" ]
+                            [ input
+                                [ type_ "checkbox"
+                                , checked (props.get row.data)
+                                , onClick (SetBoolCellValue props.set row.id)
+                                ]
+                                []
                             ]
-                            []
                         ]
              )
             )
