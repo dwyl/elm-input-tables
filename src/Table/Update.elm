@@ -21,10 +21,25 @@ update msg tableState =
                         SubDropdownColumn props ->
                             let
                                 newProps =
-                                    { props
-                                        | focussedRowId = Just rowId
-                                        , focussedOption = Nothing
-                                    }
+                                    (case props.focussedRowId of
+                                        Just currentFocussedRowId ->
+                                            if currentFocussedRowId == rowId then
+                                                { props
+                                                    | focussedRowId = Nothing
+                                                    , focussedOption = Nothing
+                                                }
+                                            else
+                                                { props
+                                                    | focussedRowId = Just rowId
+                                                    , focussedOption = Nothing
+                                                }
+
+                                        Nothing ->
+                                            { props
+                                                | focussedRowId = Just rowId
+                                                , focussedOption = Nothing
+                                            }
+                                    )
                             in
                                 { column | subType = SubDropdownColumn newProps }
 
