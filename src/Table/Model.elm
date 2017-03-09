@@ -1,13 +1,13 @@
 module Table.Model exposing (..)
 
 
-type alias TableState =
-    { columns : List Column
-    , rows : List Row
+type alias TableState rowData =
+    { columns : List (Column rowData)
+    , rows : List (Row rowData)
     , searchText : String
     , showVisibleColumnsUi : Bool
     , sorting : Sorting
-    , externalFilter : Row -> Bool
+    , externalFilter : Row rowData -> Bool
     }
 
 
@@ -17,47 +17,47 @@ type Sorting
     | Desc Int
 
 
-type alias Column =
+type alias Column rowData =
     { id : Int
     , name : String
     , visible : Bool
-    , subType : ColumnSubType
+    , subType : ColumnSubType rowData
     }
 
 
-type ColumnSubType
-    = DisplayColumn DisplayColumnProps
-    | TextColumn TextColumnProps
-    | DropdownColumn DropdownColumnProps
-    | SubDropdownColumn SubDropdownColumnProps
-    | CheckboxColumn CheckboxColumnProps
+type ColumnSubType rowData
+    = DisplayColumn (DisplayColumnProps rowData)
+    | TextColumn (TextColumnProps rowData)
+    | DropdownColumn (DropdownColumnProps rowData)
+    | SubDropdownColumn (SubDropdownColumnProps rowData)
+    | CheckboxColumn (CheckboxColumnProps rowData)
 
 
-type alias DisplayColumnProps =
-    { get : RowData -> String
+type alias DisplayColumnProps rowData =
+    { get : rowData -> String
     , filter : String
     }
 
 
-type alias TextColumnProps =
-    { get : RowData -> String
-    , set : RowData -> String -> RowData
+type alias TextColumnProps rowData =
+    { get : rowData -> String
+    , set : rowData -> String -> rowData
     , filter : String
     , isTextArea : Bool
     }
 
 
-type alias DropdownColumnProps =
-    { get : RowData -> String
-    , set : RowData -> String -> RowData
+type alias DropdownColumnProps rowData =
+    { get : rowData -> String
+    , set : rowData -> String -> rowData
     , filter : String
     , options : List String
     }
 
 
-type alias SubDropdownColumnProps =
-    { get : RowData -> ( String, Maybe String )
-    , set : RowData -> ( String, Maybe String ) -> RowData
+type alias SubDropdownColumnProps rowData =
+    { get : rowData -> ( String, Maybe String )
+    , set : rowData -> ( String, Maybe String ) -> rowData
     , filter : String
     , options : List ( String, List String )
     , focussedRowId : Maybe Int
@@ -65,28 +65,15 @@ type alias SubDropdownColumnProps =
     }
 
 
-type alias CheckboxColumnProps =
-    { get : RowData -> Bool
-    , set : RowData -> Bool -> RowData
+type alias CheckboxColumnProps rowData =
+    { get : rowData -> Bool
+    , set : rowData -> Bool -> rowData
     , filter : Maybe Bool
     }
 
 
-type alias Row =
+type alias Row rowData =
     { id : Int
-    , data : RowData
+    , data : rowData
     , checked : Bool
-    }
-
-
-type alias RowData =
-    { conflictOfInterest : Bool
-    , title : String
-    , author : String
-    , programCode : String
-    , reviewCount : String
-    , notes : String
-    , category : String
-    , decision : ( String, Maybe String )
-    , stageId : Int
     }

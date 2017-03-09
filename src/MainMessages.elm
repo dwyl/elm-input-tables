@@ -5,6 +5,6 @@ import MainModel exposing (..)
 
 
 type Msg
-    = Table TableMsg
+    = Table (TableMsg RowData)
     | SetDecisionFilter DecisionFilter
     | SetStage Int

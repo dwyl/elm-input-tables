@@ -21,7 +21,7 @@ stages =
     ]
 
 
-tableState : TableState
+tableState : TableState RowData
 tableState =
     { columns =
         [ Column 2 "title" True (DisplayColumn (DisplayColumnProps .title ""))

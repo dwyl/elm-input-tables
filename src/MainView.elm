@@ -28,7 +28,7 @@ view model =
         tableState =
             model.tableState
 
-        newTableState =
+        newTableState rowData =
             { tableState | externalFilter = tableFilter }
 
         pendingFilterClass =
@@ -59,7 +59,7 @@ view model =
                     , span [ class decidedFilterClass, onClick (SetDecisionFilter DecidedFilter) ] [ text "Decided" ]
                     , span [ class allFilterClass, onClick (SetDecisionFilter NoFilter) ] [ text "All" ]
                     ]
-                , (Html.map MainMessages.Table (Table.View.view newTableState))
+                , (Html.map (MainMessages.Table) (Table.View.view (newTableState RowData)))
                 ]
             ]
 

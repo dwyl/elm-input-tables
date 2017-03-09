@@ -4,7 +4,7 @@ import String exposing (contains, toLower, length)
 import Table.Model exposing (..)
 
 
-filter : List Row -> List Column -> String -> (Row -> Bool) -> List Row
+filter : List (Row rowData) -> List (Column rowData) -> String -> (Row rowData -> Bool) -> List (Row rowData)
 filter rows columns searchText externalFilter =
     let
         allColumnsPassFilterAndSearch row =
@@ -16,7 +16,7 @@ filter rows columns searchText externalFilter =
             |> List.filter allColumnsPassFilterAndSearch
 
 
-columnPassesSearch : String -> Row -> Column -> Bool
+columnPassesSearch : String -> Row rowData -> Column rowData -> Bool
 columnPassesSearch searchText row column =
     case column.subType of
         DisplayColumn props ->
@@ -40,7 +40,7 @@ columnPassesSearch searchText row column =
             False
 
 
-columnPassesFilter : Row -> Column -> Bool
+columnPassesFilter : Row rowData -> Column rowData -> Bool
 columnPassesFilter row column =
     case column.subType of
         DisplayColumn props ->
@@ -69,7 +69,7 @@ columnPassesFilter row column =
                     (props.get row.data) == bool
 
 
-isFilterSubstring : Row -> { a | filter : String, get : RowData -> String } -> Bool
+isFilterSubstring : Row rowData -> { a | filter : String, get : rowData -> String } -> Bool
 isFilterSubstring row props =
     containsCi (props.get row.data) props.filter
 

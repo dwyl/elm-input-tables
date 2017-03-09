@@ -5,7 +5,7 @@ import Table.Model exposing (..)
 import List.Extra exposing (updateIf)
 
 
-update : TableMsg -> TableState -> TableState
+update : TableMsg rowData -> TableState rowData -> TableState rowData
 update msg tableState =
     case msg of
         UpdateCellValue setter rowId value ->
@@ -220,7 +220,7 @@ update msg tableState =
                 ({ tableState | columns = List.map removeFocus tableState.columns })
 
 
-setCellData : List Row -> (RowData -> a -> RowData) -> Int -> a -> List Row
+setCellData : List (Row rowData) -> (rowData -> a -> rowData) -> Int -> a -> List (Row rowData)
 setCellData rows setter rowId value =
     let
         update row =
@@ -229,7 +229,7 @@ setCellData rows setter rowId value =
         updateIfHasId rowId update rows
 
 
-updateFilterText : Int -> String -> List Column -> List Column
+updateFilterText : Int -> String -> List (Column rowData) -> List (Column rowData)
 updateFilterText columnId value columns =
     let
         updateIfText column =
@@ -280,7 +280,7 @@ switchCheckboxFilter columnId newFilterState columns =
         updateIfHasId columnId (\c -> { c | subType = updateIfText c }) columns
 
 
-sortByVal : List Row -> (RowData -> String) -> Bool -> List Row
+sortByVal : List (Row rowData) -> (rowData -> String) -> Bool -> List (Row rowData)
 sortByVal rows getVal ascending =
     let
         comparator row1 row2 =

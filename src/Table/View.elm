@@ -13,74 +13,74 @@ import Table.ViewCell as ViewCell
 -- add tests for filtering
 
 
-view : TableState -> Html TableMsg
-view model =
+view : TableState rowData -> Html (TableMsg rowData)
+view tableState =
     let
         visibleColumns =
-            List.filter .visible model.columns
+            List.filter .visible tableState.columns
 
         visibleRows =
-            RowFilter.filter model.rows visibleColumns model.searchText model.externalFilter
+            RowFilter.filter tableState.rows visibleColumns tableState.searchText tableState.externalFilter
     in
         div [ onClick TableClick ]
             [ div [ class "table__controls-wrapper" ]
                 [ input
                     [ placeholder "Search"
                     , class "table__search"
-                    , value model.searchText
+                    , value tableState.searchText
                     , onInput UpdateSearchText
                     ]
                     []
                 , button
                     [ class "table-bar__toggle-button button button--secondary", onClick ToggleChooseVisibleColumnsUi ]
-                    [ text "Choose Visible Columns" ]
-                , viewChooseVisibleColumnButtons model
+                    [ text "Choose Visible (Column rowData)s" ]
+                , viewChooseVisibleColumnButtons tableState
                 ]
             , table [ class "table" ]
                 [ thead []
-                    (viewHeaders model)
+                    (viewHeaders tableState)
                 , Keyed.node "tbody"
                     []
-                    (List.map (viewTableRow model.columns) visibleRows)
+                    (List.map (viewTableRow tableState.columns) visibleRows)
                 ]
             ]
 
 
-viewChooseVisibleColumnButtons : TableState -> Html TableMsg
-viewChooseVisibleColumnButtons model =
-    div [ hidden (not model.showVisibleColumnsUi) ]
+viewChooseVisibleColumnButtons : TableState rowData -> Html (TableMsg rowData)
+viewChooseVisibleColumnButtons tableState =
+    div [ hidden (not tableState.showVisibleColumnsUi) ]
         (List.map
             (viewChooseVisibleColumnButton ToggleColumnVisibility)
-            model.columns
+            tableState.columns
         )
 
 
-viewChooseVisibleColumnButton : (Int -> TableMsg) -> Column -> Html TableMsg
+viewChooseVisibleColumnButton : (Int -> TableMsg rowData) -> Column rowData -> Html (TableMsg rowData)
 viewChooseVisibleColumnButton message column =
     button [ onClick (message column.id) ] [ text column.name ]
 
 
-viewHeaders : TableState -> List (Html TableMsg)
+viewHeaders : TableState rowData -> List (Html (TableMsg rowData))
 viewHeaders model =
     [ tr [ class "table__header-row" ] ((checkboxHeader model) :: (viewOtherHeaders model)) ]
 
 
-checkboxHeader : TableState -> Html TableMsg
+checkboxHeader : TableState rowData -> Html (TableMsg rowData)
 checkboxHeader model =
     th [] [ checkbox ToggleAllRowsCheckboxes (List.all .checked model.rows) ]
 
 
-checkbox : TableMsg -> Bool -> Html TableMsg
+checkbox : TableMsg rowData -> Bool -> Html (TableMsg rowData)
 checkbox message checkedVal =
     input [ type_ "checkbox", checked checkedVal, onClick message ] []
 
 
-viewOtherHeaders : TableState -> List (Html TableMsg)
+viewOtherHeaders : TableState rowData -> List (Html (TableMsg rowData))
 viewOtherHeaders model =
     List.filterMap (viewHeader model.sorting) model.columns
 
 
-viewHeader : Sorting -> Column -> Maybe (Html TableMsg)
+viewHeader : Sorting -> Column rowData -> Maybe (Html (TableMsg rowData))
 viewHeader sorting column =
     if column.visible then
         let
@@ -156,11 +156,12 @@ viewHeader sorting column =
         Nothing
 
 
-viewTableRow : List Column -> Row -> ( String, Html TableMsg )
+viewTableRow : List (Column rowData) -> Row rowData -> ( String, Html (TableMsg rowData) )
 viewTableRow columns row =
     ( (toString row.id), tr [] ((checkboxCell row) :: (viewCells columns row)) )
 
 
+checkboxCell : Row rowData -> Html (TableMsg rowData)
 checkboxCell row =
     td [ class "table-cell" ]
         [ checkbox (ToggleRowCheckbox row.id) row.checked
@@ -168,5 +169,6 @@ checkboxCell row =
         ]
 
 
+viewCells : List (Column rowData) -> Row rowData -> List (Html (TableMsg rowData))
 viewCells columns row =
     List.filterMap (ViewCell.view row) columns
