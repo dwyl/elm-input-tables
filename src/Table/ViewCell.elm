@@ -11,12 +11,13 @@ import Table.Messages exposing (..)
 view row column =
     if column.visible then
         Just
-            (td []
-                (case column.subType of
-                    DisplayColumn props ->
+            ((case column.subType of
+                DisplayColumn props ->
+                    td [ class "table-cell" ]
                         [ text (props.get row.data) ]
 
-                    TextColumn props ->
+                TextColumn props ->
+                    td [ class "table-cell table-cell--control" ]
                         [ (if props.isTextArea then
                             textarea
                            else
@@ -28,93 +29,87 @@ view row column =
                             []
                         ]
 
-                    DropdownColumn props ->
-                        let
-                            viewOption optionsValue =
-                                option [ selected (optionsValue == (props.get row.data)) ] [ text optionsValue ]
-                        in
-                            [ select [ onInput (UpdateCellValue props.set row.id) ]
+                DropdownColumn props ->
+                    let
+                        viewOption optionsValue =
+                            option [ selected (optionsValue == (props.get row.data)) ] [ text optionsValue ]
+                    in
+                        td [ class "table-cell table-cell--control" ]
+                            [ select
+                                [ class "table-cell__control"
+                                , onInput (UpdateCellValue props.set row.id)
+                                ]
                                 (List.map viewOption props.options)
                             ]
 
-                    SubDropdownColumn props ->
-                        let
-                            ( choice, subChoice ) =
-                                props.get row.data
+                SubDropdownColumn props ->
+                    let
+                        ( choice, subChoice ) =
+                            props.get row.data
 
-                            buttonText =
-                                subChoice
-                                    |> Maybe.map (\sub -> choice ++ ": " ++ sub)
-                                    |> Maybe.withDefault choice
+                        buttonText =
+                            subChoice
+                                |> Maybe.map (\sub -> choice ++ ": " ++ sub)
+                                |> Maybe.withDefault choice
 
-                            optionList =
-                                case props.focussedRowId of
-                                    Nothing ->
-                                        []
+                        optionList =
+                            case props.focussedRowId of
+                                Nothing ->
+                                    text ""
 
-                                    Just rowId ->
-                                        if rowId == row.id then
-                                            List.map viewOption props.options
-                                        else
-                                            []
+                                Just rowId ->
+                                    if rowId == row.id then
+                                        ul
+                                            [ class "table-cell__menu" ]
+                                            (List.map viewOption props.options)
+                                    else
+                                        text ""
 
-                            viewOption ( choice, subChoices ) =
-                                let
-                                    liChildren =
-                                        if List.isEmpty subChoices then
-                                            [ a [ onClick (SelectDropdownParent row.id column.id choice props.set) ] [ text choice ] ]
-                                        else
-                                            ([ a
-                                                [ onMouseEnter (ViewDropdownChildren row.id column.id choice props.set)
-                                                , onClick (SelectDropdownParent row.id column.id choice props.set)
-                                                ]
-                                                [ text choice
-                                                , i [ class "icon-arrow-right" ] []
-                                                ]
-                                             , ul
-                                                [ style
-                                                    [ ( "position", "absolute" )
-                                                    , ( "z-index", "10" )
-                                                    , ( "background-color", "white" )
-                                                    , ( "top", "0" )
-                                                    , ( "left", "95px" )
-                                                    ]
-                                                , class "nav nav-tabs nav-stacked"
-                                                ]
-                                                (case props.focussedOption of
-                                                    Nothing ->
-                                                        []
-
-                                                    Just option ->
-                                                        if option == choice then
-                                                            List.map (viewSubChoice choice) subChoices
-                                                        else
-                                                            []
-                                                )
-                                             ]
-                                            )
-                                in
-                                    li [ style [ ( "position", "relative" ) ] ]
-                                        liChildren
-
-                            viewSubChoice choice subChoice =
-                                li [] [ a [ onClick (SelectDropdownChild row.id column.id choice subChoice props.set) ] [ text subChoice ] ]
-                        in
-                            [ a [ class "btn dropdown-toggle", onClickNoPropagate (ToggleCellDropdown row.id column.id) ]
-                                [ text buttonText, span [ class "caret" ] [] ]
-                            , ul
-                                [ style
-                                    [ ( "position", "absolute" )
-                                    , ( "z-index", "10" )
-                                    , ( "background-color", "white" )
-                                    , ( "cursor", "pointer" )
+                        viewOption ( choice, subChoices ) =
+                            if List.isEmpty subChoices then
+                                li
+                                    [ class "table-cell__menu-item"
+                                    , onClick (SelectDropdownParent row.id column.id choice props.set)
                                     ]
-                                , class "nav nav-tabs nav-stacked"
+                                    [ text choice ]
+                            else
+                                (li
+                                    [ class "table-cell__menu-item table-cell__menu-item--with-children"
+                                    , onMouseEnter (ViewDropdownChildren row.id column.id choice props.set)
+                                    , onClick (SelectDropdownParent row.id column.id choice props.set)
+                                    ]
+                                    [ text choice
+                                    , (case props.focussedOption of
+                                        Nothing ->
+                                            text ""
+
+                                        Just option ->
+                                            if option == choice then
+                                                ul
+                                                    [ class "table-cell__menu table-cell__menu--sub"
+                                                    ]
+                                                    ((li [ class "table-cell__menu-item" ] [ text "For: " ]) :: List.map (viewSubChoice choice) subChoices)
+                                            else
+                                                text ""
+                                      )
+                                    ]
+                                )
+
+                        viewSubChoice choice subChoice =
+                            li
+                                [ class "table-cell__menu-item"
+                                , onClickNoPropagate (SelectDropdownChild row.id column.id choice subChoice props.set)
                                 ]
-                                optionList
+                                [ text subChoice ]
+                    in
+                        td [ class "table-cell table-cell--control" ]
+                            [ a [ class "table-cell__control", onClickNoPropagate (ToggleCellDropdown row.id column.id) ]
+                                [ text buttonText, span [ class "caret" ] [] ]
+                            , optionList
                             ]
 
-                    CheckboxColumn props ->
+                CheckboxColumn props ->
+                    td [ class "table-cell table-cell--control" ]
                         [ input
                             [ type_ "checkbox"
                             , checked (props.get row.data)
@@ -122,7 +117,7 @@ view row column =
                             ]
                             []
                         ]
-                )
+             )
             )
     else
         Nothing

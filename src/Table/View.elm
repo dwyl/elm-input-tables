@@ -22,18 +22,20 @@ view model =
         visibleRows =
             RowFilter.filter model.rows visibleColumns model.searchText model.externalFilter
     in
-        div [ class "container", onClick TableClick ]
-            [ input
-                [ placeholder "Search"
-                , value model.searchText
-                , onInput UpdateSearchText
+        div [ onClick TableClick ]
+            [ div [ class "table__controls-wrapper" ]
+                [ input
+                    [ placeholder "Search"
+                    , value model.searchText
+                    , onInput UpdateSearchText
+                    ]
+                    []
+                , button
+                    [ class "button primary", onClick ToggleChooseVisibleColumnsUi ]
+                    [ text "Choose Visible Columns" ]
+                , viewChooseVisibleColumnButtons model
                 ]
-                []
-            , button
-                [ class "button primary", onClick ToggleChooseVisibleColumnsUi ]
-                [ text "Choose Visible Columns" ]
-            , viewChooseVisibleColumnButtons model
-            , table [ class "table table-condensed table-bordered" ]
+            , table [ class "table" ]
                 [ thead []
                     (viewHeaders model)
                 , Keyed.node "tbody"
@@ -159,7 +161,7 @@ viewTableRow columns row =
 
 
 checkboxCell row =
-    td []
+    td [ class "table-cell" ]
         [ checkbox (ToggleRowCheckbox row.id) row.checked
         , span [] [ text (toString row.id) ]
         ]

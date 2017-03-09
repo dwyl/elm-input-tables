@@ -1,0 +1,202 @@
+/* FROM MAIN APP START*/
+
+/*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+
+    ~ Custom Resets ~
+  [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]*/
+
+/* Edited version of:
+   http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, img, ins, kbd, q, s, samp,
+small, strike, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+html {
+  font-size: 16px;
+  min-height: 100%;
+  font-size: 1rem;
+  min-height: 100vh;
+  background-color: #f4f4f6;
+}
+body {
+  line-height: 1;
+  font-family: 'Roboto', Helvetica, Ariel, sans-serif;
+  font-weight: 400;
+  background-color: #ffffff;
+}
+
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+input {
+  line-height: normal;
+}
+textarea {
+  font-family: sans-serif;
+}
+caption, tbody, tfoot, thead, tr, th, td {}
+p {
+  margin-bottom: 1rem;
+}
+strong {}
+a {
+    text-decoration: underline;
+}
+  a:hover {
+    color: initial;
+  }
+
+pre {
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+  text-align: left;
+}
+
+/*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+
+    ~ Custom Fonts ~
+  [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]*/
+
+@import 'https://fonts.googleapis.com/css?family=Raleway|Roboto:300,500,400,700';
+
+/* FROM MAIN APP END*/
+
+/* TABLE */
+  .table__wrapper{
+    margin:0 4rem;
+  }
+
+  .table__tab{
+    line-height: 2.5rem;
+    background-color: #e7e6e6;
+    display: inline-block;
+    padding: 0 1.75rem;
+    border: 1px solid #979797;
+    border-bottom: none;
+    font-family: 'Raleway';
+    cursor: pointer;
+  }
+
+      .table__tab--active{
+        background-color: #ffffff;
+        -webkit-box-shadow:0px 2px 0px -1px #ffffff;
+        -moz-box-shadow:0px 2px 0px -1px #ffffff;
+        box-shadow: 0px 2px 0px -1px #ffffff;
+      }
+
+  .table__controls-wrapper{
+    border: 1px solid #979797;
+    border-bottom: none;
+  }
+.table {
+  min-width: 100%;
+  border: solid 1px #979797;
+  background-color: #ffffff;
+}
+
+
+/* TABLE CELL */
+.table-cell {
+  background-color: #F0F0F0;
+  padding: 0.25rem;
+  font-size: 0.875rem;
+  position:relative;
+}
+    .table-cell--data{}
+
+    .table-cell--control{
+      background-color: #E5F6EF;
+    }
+
+  .table-cell__data{}
+
+  .table-cell__control{
+    display: block;
+    width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 1rem; /* 16px */
+    /* Triangle pointing Downwards to indicate dropdown */
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAgCAYAAAB+ZAqzAAAAAXNSR0IArs4c6QAAAVhJREFUWAnNkK8vRWEch49hNpsgCIoiSZIm+hNEURQEURRFURTF20RNkiRFUWyCzYYZnod7bcxx7jnvr/Nsn3vfe877/Xyf3aqqqgF571l0qpbJU4/EdNHpkwM++/Kv6fLNLKcbUlpOB11+sMmv0mI6/MkZT0vJubuWFd68kNxy7nT3vxzyNreYOxuZ48YtySXnLneOxRa3com5qxXn3E4t547WrDLxSlLJ2e2OThwxlUrM7s7MM3lHYsvZaXcQ20zHFrMzmAkaLkgsObvsjMIaLW8kVM4Ou6JyTFuomB3RWaDxnnSVc9aOJOzQ2lXM2WRM0nxJ2so542xS1mlvK+ZMFk7YMq6cd7OxyKYH0iTnHe9mZY9tTWLeyc40G69InZzvvFOEDbbWifmuKKds/y3ns+IsYfBIRnKefdYL9rEYiXnuDTOYXA/jOZip4Iavgme+doddnoP5AEOdX53zUZ1XAAAAAElFTkSuQmCC);
+    background-size: 0.625rem 0.5rem; /* 10px 8px */
+    background-repeat: no-repeat;
+    background-position: 95%;
+    background-color: #ffffff;
+    text-decoration: none;
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    border-radius: 3px;
+    border: solid 1px #808080;
+    font-size: 0.8125rem;
+    box-sizing: border-box;
+  }
+  .table-cell__menu{
+    position: absolute;
+    z-index: 10;
+    background-color: white;
+    cursor: pointer;
+    list-style-type: none;
+    width: 100%;
+    -webkit-box-shadow: 2px 4px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 2px 4px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 2px 4px 5px 0px rgba(0,0,0,0.5);
+    border: solid 1px #808080;
+  }
+      .table-cell__menu--sub{
+        top: 0;
+        left: 100%;
+      }
+
+
+  .table-cell__menu-item{
+    position:relative;
+    line-height: 2.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .table-cell__menu-item:hover{
+    background-color: #f0f0f0;
+  }
+
+      .table-cell__menu-item--with-children{
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAAAAXNSR0IArs4c6QAAAW5JREFUOBFjYACChIQog+TkZCEQm1zABNL4+y+jw4+f32/GxkYl////n5Ecw8AGQTT+F/n3//+c2NjoYyAXkmoYkkFQ4xj+W/z+8/9MbGzkpLS0NH5iDcQwCKqR+d9/htyv3z6DvBtLjGG4DILpFQd6d1F0TNTB2NhYHZggNpqQQVA9/+3+/f9zPjo2sicpKYmXAoPAWlkY/jMU//z1/UZcXHQ4umFEughFm9Tff/9WxMRE7YlJilGHyZBjEFjvf4b/zsAEeBgYdoogAbINAqbaJSzM7HqLFy++DzKIBUSQBBgZrgJtz168ePlBZH2kuOgLIwNjqaqyugG6ISADiXIR0BurmJhYixYtWvQU2RXIbLwGAV1wk4mJIWfRomV7kDVhY2P1GiMj4zdGJsZqFRU1PWIMARmM4SKgIRvY2RgK5s5d9hCbzbjEkAxivMfEyJC7ePGybbgU4xMHG8TK/H8rAwPbjAULFvzAp5gucgBskm2t6l95sQAAAABJRU5ErkJggg==);
+        background-size:  0.5rem 0.625rem; /* 8px  10px */
+        background-repeat: no-repeat;
+        background-position: 95%;
+      }

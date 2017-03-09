@@ -30,15 +30,37 @@ view model =
 
         newTableState =
             { tableState | externalFilter = tableFilter }
+
+        pendingFilterClass =
+            if model.decisionFilter == UndecidedFilter then
+                "table__tab table__tab--active"
+            else
+                "table__tab"
+
+        decidedFilterClass =
+            if model.decisionFilter == DecidedFilter then
+                "table__tab table__tab--active"
+            else
+                "table__tab"
+
+        allFilterClass =
+            if model.decisionFilter == NoFilter then
+                "table__tab table__tab--active"
+            else
+                "table__tab"
     in
         div []
-            [ div [] (viewStageButtons model.stages)
-            , div []
-                [ button [ onClick (SetDecisionFilter UndecidedFilter) ] [ text "Pending" ]
-                , button [ onClick (SetDecisionFilter DecidedFilter) ] [ text "Decided" ]
-                , button [ onClick (SetDecisionFilter NoFilter) ] [ text "All" ]
+            [ span []
+                (viewStageButtons model.stages)
+            , div
+                [ class "table__wrapper" ]
+                [ div [ class "table__tabs-wrapper" ]
+                    [ span [ class pendingFilterClass, onClick (SetDecisionFilter UndecidedFilter) ] [ text "Pending" ]
+                    , span [ class decidedFilterClass, onClick (SetDecisionFilter DecidedFilter) ] [ text "Decided" ]
+                    , span [ class allFilterClass, onClick (SetDecisionFilter NoFilter) ] [ text "All" ]
+                    ]
+                , (Html.map MainMessages.Table (Table.View.view newTableState))
                 ]
-            , (Html.map MainMessages.Table (Table.View.view newTableState))
             ]
 
 
