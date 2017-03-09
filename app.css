@@ -120,16 +120,43 @@ pre {
         box-shadow: 0px 2px 0px -1px #ffffff;
       }
 
+
   .table__controls-wrapper{
     border: 1px solid #979797;
     border-bottom: none;
   }
+
+  .table__search{
+    display: inline-block;
+    height: 2rem;
+    width: 32rem;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0.25rem 1rem;
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #bdbdbd;
+    border-radius: 3px;
+  }
+
 .table {
   min-width: 100%;
   border: solid 1px #979797;
   background-color: #ffffff;
 }
-
+  .table-bar__toggle-input {
+    display: none;
+  }
+      .table-bar__toggle-input:checked ~ .bar--table {
+        height: auto;
+        margin-bottom: 1.125rem;
+        padding: 0.625rem 1rem 0;
+      }
+      .table-bar__toggle-input:checked ~ .table-bar__toggle-button {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAAAXNSR0IArs4c6QAAANpJREFUOBFjYCAO1ACVKRCnlLAqDaCSn0C8mbBS4lTsAyr7D8UBxGnBrSoayTCQoQ+BmBu3cvwy/EDpF0AMcx2M7sSvDbfsFCyGgQz9BcTauLVhlzEGCv8FYpir0OmD2LVhF2UCCp/CYxjM8Hjs2jFFs4gwDGToKyAWxNSOKiIG5L4HYpgrCNEzULVj8haTYBjIMlA4m2EaAxFxAFKEXIRN/hxQHzPECATJCmReA2JsGogRy0UYBWFVUGAYyMKPQCwJMYqBQR7I+ArExLgEn5plMAM3UsEwmEXOAGbkm/bVMZcxAAAAAElFTkSuQmCC)
+      }
 
 /* TABLE CELL */
 .table-cell {
@@ -200,3 +227,76 @@ pre {
         background-repeat: no-repeat;
         background-position: 95%;
       }
+
+
+      /*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+
+          Buttons
+        [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]*/
+
+      .button {
+          display: inline-block;
+          position: relative;
+          padding: 0 0.5rem;
+          z-index: 1;
+
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance:  none; /* Removes NATIVE styling (esp. when .button is an input)*/
+
+          border-width: 1px;
+          border-style: solid;
+          -webkit-box-shadow:
+              inset 0px -1px 2px 0px rgba(0,0,0,0.50),
+              inset 0px 1px 2px 0px rgba(255,255,255,0.5);
+          -moz-box-shadow:
+              inset 0px -1px 2px 0px rgba(0,0,0,0.50),
+              inset 0px 1px 2px 0px rgba(255,255,255,0.5);
+          box-shadow:
+              inset 0px -1px 2px 0px rgba(0,0,0,0.50),
+              inset 0px 1px 2px 0px rgba(255,255,255,0.5);
+          border-radius: 3px;
+          /* label: */
+          font-family: 'Raleway', "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-weight: 400;
+          font-size: 0.875rem;
+          line-height: 2.4;
+          letter-spacing: 0.4px;
+          text-decoration: none;
+          text-transform: capitalize;
+          text-align: center;
+          color: #000000;
+      }
+
+      .button:visited {}
+
+      .button:hover {
+          cursor: pointer;
+          color: #000000;
+          text-decoration: none;
+      }
+      .button:focus {
+          text-decoration: initial;
+      }
+
+        .button--primary {
+            background-color: #00AA61;
+            border-color: #333333;
+            /* label: */
+            color: #FFFFFF;
+        }
+            .button--primary:hover {
+                color: #ffffff;
+            }
+        .button--secondary {
+            background-color: #DBDBDB;
+            border-color: #808080;
+        }
+        .button--tertiary {
+            background-color: #B2E3CE; /* light green */
+            border-color: #808080;
+        }

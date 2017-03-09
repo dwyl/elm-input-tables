@@ -26,12 +26,13 @@ view model =
             [ div [ class "table__controls-wrapper" ]
                 [ input
                     [ placeholder "Search"
+                    , class "table__search"
                     , value model.searchText
                     , onInput UpdateSearchText
                     ]
                     []
                 , button
-                    [ class "button primary", onClick ToggleChooseVisibleColumnsUi ]
+                    [ class "table-bar__toggle-button button button--secondary", onClick ToggleChooseVisibleColumnsUi ]
                     [ text "Choose Visible Columns" ]
                 , viewChooseVisibleColumnButtons model
                 ]
@@ -61,7 +62,7 @@ viewChooseVisibleColumnButton message column =
 
 viewHeaders : TableState -> List (Html TableMsg)
 viewHeaders model =
-    [ tr [] ((checkboxHeader model) :: (viewOtherHeaders model)) ]
+    [ tr [ class "table__header-row" ] ((checkboxHeader model) :: (viewOtherHeaders model)) ]
 
 
 checkboxHeader : TableState -> Html TableMsg
