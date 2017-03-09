@@ -33,7 +33,7 @@ view tableState =
                     []
                 , button
                     [ class "table-bar__toggle-button button button--secondary", onClick ToggleChooseVisibleColumnsUi ]
-                    [ text "Choose Visible (Column rowData)s" ]
+                    [ text "Choose Visible Columns" ]
                 , viewChooseVisibleColumnButtons tableState
                 ]
             , table [ class "table" ]
