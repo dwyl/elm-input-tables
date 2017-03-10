@@ -184,13 +184,49 @@ pre {
   }
 
 /* TABLE HEADER */
+.table-header{
+  text-align:left;
+  padding: 0.25rem;
 
-.table-header__sort-wrapper{
-  
 }
 
-.table-header__name{}
-.table-header__icon{}
+    .table-header--control{
+      background-color: #E5F6EF;
+    }
+
+  .table-header__sort-wrapper{
+    margin-bottom: 0.5rem;
+    padding-right: 1.875rem;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAAAXNSR0IArs4c6QAAAblJREFUOBGtUblKA1EUvXcSNxC01jIu4JYUamGlbcBKm8QZCQEXon6BTRr/wQVETUwqty+wEFRciowBQcVKEKwiWmV73hOdMMwETeGDx9x33zln3j2HdSO8oZSaJ6L3Bi+P7OykHqWue0Ui4e5CUV0LoY2ZN7UuX88KMV+gUSzScSwWa61XDVhwwIUGtLR4PJ7nFm2KiV8Vqb73j9yuvJj/EgWmghUOuNCAlgdE89b8DAQGzpUiQ44Dh8cHhTsze/ab6NPzwyopWhJM3qNRMLGduge+Iogik8m+BPxDb4poUrwY9/sHb0zzrqafhhEOEvGW0FhjjiUS6RNoYLlGmzFCm/LnORHNeT006gwJIRRLdCUjtwt7az+RRqDVpVWrn6Lb17sMg0EolNSRPSTU6H2L8UUF6xBwCcLYpobmaRgtL+23QrJCQA93wADr0HOPbAF0XR9TVDqVc6MYtYq+Kqs1+eSZPBPJZPIcPedyeWgH6LOhBVWmdfGzjL68UmONFpN76Q07zl5XU7Y3rdrMZG+H/IOdMuaw9GTSSghx677W1+WhEwTjRekSu1YITnxd52g02oFdF/i/QV9berja4gg4oQAAAABJRU5ErkJggg==);
+    background-size: 0.625rem 0.5rem;
+    background-repeat: no-repeat;
+    background-position: right 0.625rem top 50%;
+    cursor: pointer;
+  }
+
+  .table-header__name{
+    font-weight: normal;
+    font-size: 0.8125rem;
+    text-transform: capitalize;
+  }
+
+  .table-header__icon{
+    margin-left: 0.5rem;
+    width: 0.625rem;
+    height: 0.5rem;
+    background-size: cover;
+    display: none;
+  }
+
+      .table-header__icon--asc{
+        display: inline-block;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAAAXNSR0IArs4c6QAAAVRJREFUOBFjYCACmJqahoEwEUoZGAkpsrKyEvv58+dVkDp2dnbtY8eOvcKnhwmfJEju169f04GUCAhD2SBhnIAZpwxQwsTEJPL///81SGo0paWlbz179uwKkhgKE6eXgWEmATTsChALI+tgZGR8C8Q6p0+ffoEsDmPj9DLQoBnohoE0gcRAcjAD0GmsXga6LgaoqRJdMRJfQ0ZG5i7Q65eQxMBMDC8bGxtLAmVAsSqIrhiN/x7I1z579uxzZHFsXp4FVEDIMJAZIDUgtSgAxctAryYAvVqGogI/R01KSurB8+fPL8KUwb1saWkpDUxnoOQgAJMkkv7Axsamc/z48acg9XAv//79ezaQT6phIDMEoHpBbAawl4EJOBno1WKwCHmEKjDBPwHG+nlGYLjJAg0DJWA+8syC6AIm9k+gBM8CNKgFKPQNyPlGiYEgvVCzKDUGVT8Af8J469uthh4AAAAASUVORK5CYII=);
+      }
+
+      .table-header__icon--desc{
+        display: inline-block;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAgCAYAAAB+ZAqzAAAAAXNSR0IArs4c6QAAAVhJREFUWAnNkK8vRWEch49hNpsgCIoiSZIm+hNEURQEURRFURTF20RNkiRFUWyCzYYZnod7bcxx7jnvr/Nsn3vfe877/Xyf3aqqqgF571l0qpbJU4/EdNHpkwM++/Kv6fLNLKcbUlpOB11+sMmv0mI6/MkZT0vJubuWFd68kNxy7nT3vxzyNreYOxuZ48YtySXnLneOxRa3com5qxXn3E4t547WrDLxSlLJ2e2OThwxlUrM7s7MM3lHYsvZaXcQ20zHFrMzmAkaLkgsObvsjMIaLW8kVM4Ou6JyTFuomB3RWaDxnnSVc9aOJOzQ2lXM2WRM0nxJ2so542xS1mlvK+ZMFk7YMq6cd7OxyKYH0iTnHe9mZY9tTWLeyc40G69InZzvvFOEDbbWifmuKKds/y3ns+IsYfBIRnKefdYL9rEYiXnuDTOYXA/jOZip4Iavgme+doddnoP5AEOdX53zUZ1XAAAAAElFTkSuQmCC);
+      }
 
 /* TABLE CELL */
 .table-cell {

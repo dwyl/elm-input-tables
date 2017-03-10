@@ -127,45 +127,48 @@ viewHeader sorting column =
                         ]
                         [ text filterText ]
 
-            sortingText =
+            sortingClass =
                 case sorting of
                     NoSorting ->
-                        "-"
+                        "table-header__icon"
 
                     Asc id ->
                         if id == column.id then
-                            "Asc"
+                            "table-header__icon--asc"
                         else
-                            "-"
+                            "table-header__icon"
 
                     Desc id ->
                         if id == column.id then
-                            "Desc"
+                            "table-header__icon--desc"
                         else
-                            "-"
+                            "table-header__icon"
+
+            ( filterElement, headerClass ) =
+                (case column.subType of
+                    DisplayColumn props ->
+                        ( stringFilter props, "" )
+
+                    TextColumn props ->
+                        ( stringFilter props, " table-header--control" )
+
+                    DropdownColumn props ->
+                        ( stringFilter props, " table-header--control" )
+
+                    SubDropdownColumn props ->
+                        ( stringFilter props, " table-header--control" )
+
+                    CheckboxColumn props ->
+                        ( boolFilter props, " table-header--control" )
+                )
         in
             Just
-                (th [ class "table-header" ]
+                (th [ class ("table-header" ++ headerClass) ]
                     [ div [ class "table-header__sort-wrapper", onClick (SortRows column) ]
                         [ span [ class "table-header__name" ] [ text column.name ]
-                        , i [ class "table-header__icon" ] [ text sortingText ]
+                        , i [ class ("table-header__icon " ++ sortingClass) ] []
                         ]
-                    , (case column.subType of
-                        DisplayColumn props ->
-                            stringFilter props
-
-                        TextColumn props ->
-                            stringFilter props
-
-                        DropdownColumn props ->
-                            stringFilter props
-
-                        SubDropdownColumn props ->
-                            stringFilter props
-
-                        CheckboxColumn props ->
-                            boolFilter props
-                      )
+                    , filterElement
                     ]
                 )
     else
