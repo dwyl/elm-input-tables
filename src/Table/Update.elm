@@ -3,6 +3,7 @@ module Table.Update exposing (update)
 import Table.Messages exposing (..)
 import Table.Model exposing (..)
 import List.Extra exposing (updateIf)
+import Set
 
 
 update : TableMsg rowData -> TableState rowData -> TableState rowData
@@ -151,13 +152,24 @@ update msg tableState =
              }
             )
 
-        ToggleAllRowsCheckboxes ->
+        ToggleAllRowsCheckboxes visibleRows ->
             let
                 allChecked =
-                    List.all .checked tableState.rows
+                    List.all .checked visibleRows
+
+                visibleRowsIds =
+                    visibleRows
+                        |> List.map .id
+                        |> Set.fromList
 
                 newRows =
-                    List.map (\r -> { r | checked = not allChecked }) tableState.rows
+                    List.map setChecked tableState.rows
+
+                setChecked row =
+                    if Set.member row.id visibleRowsIds then
+                        { row | checked = not allChecked }
+                    else
+                        { row | checked = False }
             in
                 ({ tableState | rows = newRows })
 

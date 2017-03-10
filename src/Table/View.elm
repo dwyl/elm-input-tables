@@ -20,7 +20,11 @@ view tableState =
             List.filter .visible tableState.columns
 
         unfilteredRows =
-            RowFilter.filter tableState.rows visibleColumns tableState.searchText tableState.externalFilter
+            RowFilter.filter
+                tableState.rows
+                visibleColumns
+                tableState.searchText
+                tableState.externalFilter
 
         visibleRows =
             getPageRows tableState unfilteredRows
@@ -48,7 +52,7 @@ view tableState =
                 ]
             , table [ class "table" ]
                 [ thead []
-                    (viewHeaders tableState)
+                    (viewHeaders tableState visibleRows)
                 , Keyed.node "tbody"
                     []
                     (List.map (viewTableRow tableState.columns) visibleRows)
@@ -118,14 +122,18 @@ viewChooseVisibleColumnButton message column =
         a [ class ("bar__toggle" ++ extraClass), onClick (message column.id) ] [ text column.name ]
 
 
-viewHeaders : TableState rowData -> List (Html (TableMsg rowData))
-viewHeaders model =
-    [ tr [ class "table__header-row" ] ((checkboxHeader model) :: (viewOtherHeaders model)) ]
+viewHeaders : TableState rowData -> List (Row rowData) -> List (Html (TableMsg rowData))
+viewHeaders model visibleRows =
+    [ tr [ class "table__header-row" ] ((checkboxHeader model visibleRows) :: (viewOtherHeaders model)) ]
 
 
-checkboxHeader : TableState rowData -> Html (TableMsg rowData)
-checkboxHeader model =
-    th [] [ checkbox ToggleAllRowsCheckboxes (List.all .checked model.rows) ]
+checkboxHeader : TableState rowData -> List (Row rowData) -> Html (TableMsg rowData)
+checkboxHeader model visibleRows =
+    th []
+        [ checkbox
+            (ToggleAllRowsCheckboxes visibleRows)
+            (List.all .checked visibleRows)
+        ]
 
 
 checkbox : TableMsg rowData -> Bool -> Html (TableMsg rowData)
@@ -225,8 +233,10 @@ viewTableRow columns row =
 checkboxCell : Row rowData -> Html (TableMsg rowData)
 checkboxCell row =
     td [ class "table-cell" ]
-        [ checkbox (ToggleRowCheckbox row.id) row.checked
-        , span [] [ text (toString row.id) ]
+        [ label []
+            [ checkbox (ToggleRowCheckbox row.id) row.checked
+            , span [] [ text (toString row.id) ]
+            ]
         ]
 
 
