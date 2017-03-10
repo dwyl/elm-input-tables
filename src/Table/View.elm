@@ -19,8 +19,11 @@ view tableState =
         visibleColumns =
             List.filter .visible tableState.columns
 
-        visibleRows =
+        unfilteredRows =
             RowFilter.filter tableState.rows visibleColumns tableState.searchText tableState.externalFilter
+
+        visibleRows =
+            getPageRows tableState unfilteredRows
 
         tableButtonDropdownClass =
             if tableState.showVisibleColumnsUi then
@@ -37,6 +40,7 @@ view tableState =
                     , onInput SetSearchText
                     ]
                     []
+                , viewPageControls tableState unfilteredRows
                 , button
                     [ class tableButtonDropdownClass, onClick ToggleChooseVisibleColumnsUi ]
                     [ text "Choose Visible Columns" ]
@@ -50,6 +54,44 @@ view tableState =
                     (List.map (viewTableRow tableState.columns) visibleRows)
                 ]
             ]
+
+
+getPageRows { pageSize, currentPage } visibleRows =
+    case pageSize of
+        Nothing ->
+            visibleRows
+
+        Just pageSize ->
+            let
+                start =
+                    pageSize * (currentPage - 1)
+            in
+                visibleRows
+                    |> List.drop start
+                    |> List.take pageSize
+
+
+viewPageControls { pageSize, currentPage } visibleRows =
+    case pageSize of
+        Nothing ->
+            text ""
+
+        Just pageSize ->
+            let
+                start =
+                    toString (pageSize * (currentPage - 1))
+
+                end =
+                    toString (Basics.min (pageSize * currentPage) (List.length visibleRows))
+
+                total =
+                    toString (List.length visibleRows)
+            in
+                span []
+                    [ span [] [ text (start ++ " - " ++ end ++ " of " ++ total) ]
+                    , span [ onClick PreviousPage ] [ text " Previous " ]
+                    , span [ onClick (NextPage (List.length visibleRows)) ] [ text " Next " ]
+                    ]
 
 
 viewChooseVisibleColumnButtons : TableState rowData -> Html (TableMsg rowData)

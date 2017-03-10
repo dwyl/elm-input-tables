@@ -55,11 +55,13 @@ tableState =
     , showVisibleColumnsUi = False
     , sorting = NoSorting
     , externalFilter = (\r -> True)
+    , pageSize = Just 50
+    , currentPage = 1
     }
 
 
 initialRows =
-    List.range 1 50
+    List.range 1 500
         |> List.map makeRow
 
 

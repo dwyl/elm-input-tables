@@ -8,6 +8,8 @@ type alias TableState rowData =
     , showVisibleColumnsUi : Bool
     , sorting : Sorting
     , externalFilter : Row rowData -> Bool
+    , pageSize : Maybe Int
+    , currentPage : Int
     }
 
 

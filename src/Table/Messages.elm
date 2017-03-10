@@ -19,3 +19,5 @@ type TableMsg rowData
     | ToggleColumnVisibility Int
     | SortRows (Column rowData)
     | TableClick
+    | PreviousPage
+    | NextPage Int

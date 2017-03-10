@@ -127,12 +127,13 @@ update msg tableState =
                 )
 
         SetSearchText value ->
-            ({ tableState | searchText = value })
+            ({ tableState | searchText = value, currentPage = 1 })
 
         SetColumnFilterText columnId value ->
             ({ tableState
                 | columns =
                     updateFilterText columnId value tableState.columns
+                , currentPage = 1
              }
             )
 
@@ -232,7 +233,17 @@ update msg tableState =
                         _ ->
                             column
             in
-                ({ tableState | columns = List.map removeFocus tableState.columns })
+                { tableState | columns = List.map removeFocus tableState.columns }
+
+        PreviousPage ->
+            { tableState | currentPage = max (tableState.currentPage - 1) 1 }
+
+        NextPage rowCount ->
+            let
+                maxPage =
+                    (rowCount // (Maybe.withDefault 1 tableState.pageSize)) + 1
+            in
+                { tableState | currentPage = min (tableState.currentPage + 1) maxPage }
 
 
 setCellData : List (Row rowData) -> (rowData -> a -> rowData) -> Int -> a -> List (Row rowData)
