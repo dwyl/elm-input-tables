@@ -293,6 +293,7 @@ updateFilterText columnId value columns =
         updateIfHasId columnId (\c -> { c | subType = updateIfText c }) columns
 
 
+switchCheckboxFilter : Int -> Maybe Bool -> List (Column rowData) -> List (Column rowData)
 switchCheckboxFilter columnId newFilterState columns =
     let
         updateIfText column =
@@ -340,5 +341,6 @@ sortByVal rows getVal ascending =
                 |> List.reverse
 
 
+updateIfHasId : a -> ({ b | id : a } -> { b | id : a }) -> List { b | id : a } -> List { b | id : a }
 updateIfHasId id list =
     updateIf (\a -> a.id == id) list
