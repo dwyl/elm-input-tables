@@ -1,11 +1,11 @@
-module Table.RowFilter exposing (filter)
+module Table.RowFilter exposing (run)
 
 import String exposing (contains, toLower, length)
 import Table.Model exposing (..)
 
 
-filter : List (Row rowData) -> List (Column rowData) -> String -> (Row rowData -> Bool) -> List (Row rowData)
-filter rows columns searchText externalFilter =
+run : List (Row rowData) -> List (Column rowData) -> String -> (Row rowData -> Bool) -> List (Row rowData)
+run rows columns searchText externalFilter =
     let
         allColumnsPassFilterAndSearch row =
             List.any (columnPassesSearch searchText row) columns

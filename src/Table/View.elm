@@ -20,7 +20,7 @@ view tableState =
             List.filter .visible tableState.columns
 
         unfilteredRows =
-            RowFilter.filter
+            RowFilter.run
                 tableState.rows
                 visibleColumns
                 tableState.searchText
@@ -60,6 +60,7 @@ view tableState =
             ]
 
 
+getPageRows : TableState rowData -> List (Row rowData) -> List (Row rowData)
 getPageRows { pageSize, currentPage } visibleRows =
     case pageSize of
         Nothing ->
@@ -75,6 +76,7 @@ getPageRows { pageSize, currentPage } visibleRows =
                     |> List.take pageSize
 
 
+viewPageControls : TableState rowData -> List (Row rowData) -> Html (TableMsg rowData)
 viewPageControls { pageSize, currentPage } visibleRows =
     case pageSize of
         Nothing ->
