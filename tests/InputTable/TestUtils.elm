@@ -51,6 +51,7 @@ rowsToTableState rows =
     , externalFilter = (\r -> True)
     , pageSize = Just 3
     , currentPage = 1
+    , rowsAreSelectable = True
     }
 
 

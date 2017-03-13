@@ -57,6 +57,7 @@ tableState =
     , externalFilter = (\r -> True)
     , pageSize = Just 50
     , currentPage = 1
+    , rowsAreSelectable = False
     }
 
 

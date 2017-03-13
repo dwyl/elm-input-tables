@@ -16,6 +16,7 @@ type alias TableState rowData =
     , externalFilter : Row rowData -> Bool
     , pageSize : Maybe Int {- number of rows per page, if nothing then all rows are displayed -}
     , currentPage : Int
+    , rowsAreSelectable : Bool
     }
 
 

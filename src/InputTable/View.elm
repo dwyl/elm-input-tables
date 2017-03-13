@@ -58,7 +58,7 @@ view tableState =
                     (viewHeaders tableState visibleRows)
                 , Keyed.node "tbody"
                     []
-                    (List.map (viewTableRow tableState.columns) visibleRows)
+                    (List.map (viewTableRow tableState.rowsAreSelectable tableState.columns) visibleRows)
                 ]
             ]
 
@@ -137,7 +137,14 @@ viewChooseVisibleColumnButton message column =
 
 viewHeaders : TableState rowData -> List (Row rowData) -> List (Html (TableMsg rowData))
 viewHeaders model visibleRows =
-    [ tr [ class "table__header-row" ] ((checkboxHeader model visibleRows) :: (viewOtherHeaders model)) ]
+    let
+        headers =
+            if model.rowsAreSelectable then
+                (checkboxHeader model visibleRows) :: (viewOtherHeaders model)
+            else
+                viewOtherHeaders model
+    in
+        [ tr [ class "table__header-row" ] headers ]
 
 
 checkboxHeader : TableState rowData -> List (Row rowData) -> Html (TableMsg rowData)
@@ -241,9 +248,16 @@ viewHeader sorting column =
         Nothing
 
 
-viewTableRow : List (Column rowData) -> Row rowData -> ( String, Html (TableMsg rowData) )
-viewTableRow columns row =
-    ( (toString row.id), tr [] ((checkboxCell row) :: (viewCells columns row)) )
+viewTableRow : Bool -> List (Column rowData) -> Row rowData -> ( String, Html (TableMsg rowData) )
+viewTableRow rowsAreSelectable columns row =
+    let
+        cells =
+            if rowsAreSelectable then
+                (checkboxCell row) :: (viewCells columns row)
+            else
+                viewCells columns row
+    in
+        ( (toString row.id), tr [] cells )
 
 
 checkboxCell : Row rowData -> Html (TableMsg rowData)
