@@ -4,9 +4,11 @@
 This is a UI table that allows the user to input data into the table through text and (sub)dropdown inputs.
 It can be used when you want to allow the user to view and manipulate many pieces of data from the same view.
 
-To try it out, clone this repo and run `npm start` from the root directory.
+To try it out, clone the [repo](https://github.com/dwyl/elm-input-tables) and run `npm start` from the root directory.
 
 ## Installation
+
+`elm-package install dwyl/elm-input-tables`
 
 ## Setup
 There are 5 steps to integrating this component into your app
