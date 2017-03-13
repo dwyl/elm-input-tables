@@ -4,7 +4,7 @@ import InputTable.Model
 
 
 type alias Model =
-    { tableState : Table.Model.TableState RowData
+    { tableState : InputTable.Model.TableState RowData
     , decisionFilter : DecisionFilter
     , stageId : Maybe Int
     , stages : List Stage

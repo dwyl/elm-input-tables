@@ -59,7 +59,7 @@ view model =
                     , span [ class decidedFilterClass, onClick (SetDecisionFilter DecidedFilter) ] [ text "Decided" ]
                     , span [ class allFilterClass, onClick (SetDecisionFilter NoFilter) ] [ text "All" ]
                     ]
-                , (Html.map MainMessages.Table (Table.View.view (newTableState RowData)))
+                , (Html.map MainMessages.Table (InputTable.View.view (newTableState RowData)))
                 ]
             ]
 

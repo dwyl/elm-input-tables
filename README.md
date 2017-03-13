@@ -42,7 +42,7 @@ initialTableState =
     , showVisibleColumnsUi = False -- whether to display column toggles
     , sorting = NoSorting -- initial sorting (Asc/Desc columnId for sorting)
     , externalFilter = (\r -> True) -- custom filter rows
-    , pageSize = Just 50 -- number of rows in a page, Nothing for no pages
+    , pageSize = Just 50 -- number of rows in a page, Nothing for no paging
     , currentPage = 1 -- starting page
     , columns = initialColumns
     , rows = initialRows
@@ -53,7 +53,7 @@ initialTableState =
       1
       "title"
       True
-      (DisplayColumn {get:  .title, filter : ""})
+      (DisplayColumn {get:  .stringProp, filter : ""})
     , Column 1 "program Code is now verrrry lonnggggggggg" True (TextColumn (TextColumnProps .programCode (\d v -> { d | programCode = v }) "" False))
     , Column 8
         "decision"
@@ -77,6 +77,8 @@ initialTableState =
     , Column 1 "C.O.I" True (CheckboxColumn (CheckboxColumnProps .conflictOfInterest (\d _ -> { d | conflictOfInterest = not d.conflictOfInterest }) Nothing))
     , Column 7 "category" True (DropdownColumn (DropdownColumnProps .category (\d v -> { d | category = v }) "" [ "The Doors", "Nina Simone", "Curtis Reading" ]))
     ]    
+
+
 type alias MyRowDataType =
     { stringProp : String
     , intProp : Int

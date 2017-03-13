@@ -12,7 +12,7 @@ update msg model =
         Table tableMsg ->
             let
                 newTableState =
-                    Table.Update.update tableMsg model.tableState
+                    InputTable.Update.update tableMsg model.tableState
             in
                 ( { model | tableState = newTableState }, Cmd.none )
 
