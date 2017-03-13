@@ -149,4 +149,23 @@ all =
                         ]
                 in
                     Expect.equal tableStateSortedOnSubCategory.rows expectedSortedOnSubCategory
+        , test """NextPage should increment the currentPage if there are more rows
+          on the next page""" <|
+            \() ->
+                let
+                    updatedTableState =
+                        update (NextPage 3) testTableState
+                in
+                    Expect.equal updatedTableState.currentPage 2
+        , test """NextPage should not increment the currentPage if there are no more rows
+          on the next page""" <|
+            \() ->
+                let
+                    tableState =
+                        { testTableState | currentPage = 2 }
+
+                    updatedTableState =
+                        update (NextPage 3) tableState
+                in
+                    Expect.equal tableState.currentPage 2
         ]
