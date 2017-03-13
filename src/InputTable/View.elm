@@ -1,5 +1,9 @@
 module InputTable.View exposing (view)
 
+{-| Displays the InputTable
+@docs view
+-}
+
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
@@ -10,9 +14,8 @@ import InputTable.RowFilter as RowFilter
 import InputTable.ViewCell as ViewCell
 
 
--- add tests for filtering
-
-
+{-| When passed the tableState, this will create the InputTable view
+-}
 view : TableState rowData -> Html (TableMsg rowData)
 view tableState =
     let

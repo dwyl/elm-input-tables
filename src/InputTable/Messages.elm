@@ -1,8 +1,15 @@
 module InputTable.Messages exposing (..)
 
+{-| This module lists the messages that may be sent by InputTable events
+# Definition
+@docs TableMsg
+-}
+
 import InputTable.Model exposing (..)
 
 
+{-| TableMsg union type contains all messages sent by InputTable events
+-}
 type TableMsg rowData
     = SetCellValue (rowData -> String -> rowData) Int String
     | SetBoolCellValue (rowData -> Bool -> rowData) Int

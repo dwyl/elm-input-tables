@@ -1,11 +1,17 @@
 module InputTable.Update exposing (update)
 
+{-| Handles messages sent to InputTable
+@docs update
+-}
+
 import InputTable.Messages exposing (..)
 import InputTable.Model exposing (..)
 import List.Extra exposing (updateIf)
 import Set
 
 
+{-| When sent a TableMsg, this function will update the TableState appropriately
+-}
 update : TableMsg rowData -> TableState rowData -> TableState rowData
 update msg tableState =
     case msg of
