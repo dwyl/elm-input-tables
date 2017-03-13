@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
-    "repository": "https://github.com/user/project.git",
+    "summary": "Input tables, for tables with text and dropdown inputs",
+    "repository": "https://github.com/dwyl/elm-input-tables",
     "license": "BSD3",
     "source-directories": [
         "src"
