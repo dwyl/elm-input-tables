@@ -1,6 +1,6 @@
 module InitialData exposing (initialModel)
 
-import Table.Model exposing (..)
+import InputTable.Model exposing (..)
 import MainModel exposing (..)
 
 

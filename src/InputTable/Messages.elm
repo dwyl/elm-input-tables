@@ -1,6 +1,6 @@
-module Table.Messages exposing (..)
+module InputTable.Messages exposing (..)
 
-import Table.Model exposing (..)
+import InputTable.Model exposing (..)
 
 
 type TableMsg rowData

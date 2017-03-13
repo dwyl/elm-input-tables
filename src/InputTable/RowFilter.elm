@@ -1,7 +1,7 @@
-module Table.RowFilter exposing (run)
+module InputTable.RowFilter exposing (run)
 
 import String exposing (contains, toLower, length)
-import Table.Model exposing (..)
+import InputTable.Model exposing (..)
 
 
 run : List (Row rowData) -> List (Column rowData) -> String -> (Row rowData -> Bool) -> List (Row rowData)

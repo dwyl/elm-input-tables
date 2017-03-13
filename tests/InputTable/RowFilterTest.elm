@@ -1,10 +1,10 @@
-module Table.RowFilterTest exposing (all)
+module InputTable.RowFilterTest exposing (all)
 
 import Test exposing (..)
 import Expect
-import Table.RowFilter as RowFilter
-import Table.Model exposing (..)
-import Table.TestUtils as TestUtils
+import InputTable.RowFilter as RowFilter
+import InputTable.Model exposing (..)
+import InputTable.TestUtils as TestUtils
 
 
 all : Test

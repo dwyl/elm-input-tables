@@ -1,11 +1,11 @@
-module Table.UpdateTest exposing (all)
+module InputTable.UpdateTest exposing (all)
 
 import Test exposing (..)
 import Expect
-import Table.Messages exposing (..)
-import Table.Model exposing (..)
-import Table.Update exposing (update)
-import Table.TestUtils exposing (..)
+import InputTable.Messages exposing (..)
+import InputTable.Model exposing (..)
+import InputTable.Update exposing (update)
+import InputTable.TestUtils exposing (..)
 
 
 all : Test

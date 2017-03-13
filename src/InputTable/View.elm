@@ -1,13 +1,13 @@
-module Table.View exposing (view)
+module InputTable.View exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Html.Keyed as Keyed
-import Table.Messages exposing (..)
-import Table.Model exposing (..)
-import Table.RowFilter as RowFilter
-import Table.ViewCell as ViewCell
+import InputTable.Messages exposing (..)
+import InputTable.Model exposing (..)
+import InputTable.RowFilter as RowFilter
+import InputTable.ViewCell as ViewCell
 
 
 -- add tests for filtering

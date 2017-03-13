@@ -1,6 +1,6 @@
-module Table.TestUtils exposing (..)
+module InputTable.TestUtils exposing (..)
 
-import Table.Model exposing (..)
+import InputTable.Model exposing (..)
 
 
 type alias TestRowData =

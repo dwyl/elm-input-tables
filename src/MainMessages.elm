@@ -1,6 +1,6 @@
 module MainMessages exposing (..)
 
-import Table.Messages exposing (..)
+import InputTable.Messages exposing (..)
 import MainModel exposing (..)
 
 

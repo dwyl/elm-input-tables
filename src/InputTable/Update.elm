@@ -1,7 +1,7 @@
-module Table.Update exposing (update)
+module InputTable.Update exposing (update)
 
-import Table.Messages exposing (..)
-import Table.Model exposing (..)
+import InputTable.Messages exposing (..)
+import InputTable.Model exposing (..)
 import List.Extra exposing (updateIf)
 import Set
 

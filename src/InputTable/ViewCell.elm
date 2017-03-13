@@ -1,11 +1,11 @@
-module Table.ViewCell exposing (view)
+module InputTable.ViewCell exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput, onMouseEnter, onWithOptions)
 import Json.Decode as Json
-import Table.Model exposing (..)
-import Table.Messages exposing (..)
+import InputTable.Model exposing (..)
+import InputTable.Messages exposing (..)
 
 
 view row column =

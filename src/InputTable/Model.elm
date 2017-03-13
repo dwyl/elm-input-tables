@@ -1,4 +1,4 @@
-module Table.Model exposing (..)
+module InputTable.Model exposing (..)
 
 
 type alias TableState rowData =

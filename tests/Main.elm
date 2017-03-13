@@ -3,15 +3,15 @@ port module Main exposing (..)
 import Test exposing (..)
 import Test.Runner.Node exposing (run, TestProgram)
 import Json.Encode exposing (Value)
-import Table.RowFilterTest
-import Table.UpdateTest
+import InputTable.RowFilterTest
+import InputTable.UpdateTest
 
 
 allTests : Test
 allTests =
     describe "all tests"
-        [ Table.RowFilterTest.all
-        , Table.UpdateTest.all
+        [ InputTable.RowFilterTest.all
+        , InputTable.UpdateTest.all
         ]
 
 

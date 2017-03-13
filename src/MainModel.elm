@@ -1,6 +1,6 @@
 module MainModel exposing (..)
 
-import Table.Model
+import InputTable.Model
 
 
 type alias Model =

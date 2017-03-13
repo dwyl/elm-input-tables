@@ -5,7 +5,7 @@ import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import MainMessages exposing (..)
 import MainModel exposing (..)
-import Table.View
+import InputTable.View
 import Tuple exposing (first)
 
 

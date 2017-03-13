@@ -2,7 +2,7 @@ module MainUpdate exposing (update)
 
 import MainMessages exposing (..)
 import MainModel exposing (..)
-import Table.Update
+import InputTable.Update
 import Tuple exposing (first)
 
 
