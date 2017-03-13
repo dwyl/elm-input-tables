@@ -6,82 +6,125 @@ It can be used when you want to allow the user to view and manipulate many piece
 
 ## Installation
 
-## How to use it
-The are 4 steps to integrating this component into your app
-### 1. Add the tableState as property on your model type.
-You must pass it a type that models the data on a row eg:
-```elm-lang
+## Setup
+The are 5 steps to integrating this component into your app
+### 1. Add the tableState as property on your model type and pass it a type that models the data on a row eg:
+```elm
 
 import InputTable.Model
 
 type alias Model =
     { tableState : Table.Model.TableState MyRowDataType
-    , unrelatedPropery : String
+    , unrelatedProperty : String
     }
 
 type alias MyRowDataType =
-    { stringProp : String
-    , boolProp : Bool
-    , recordProp : {childA: String, childB: Maybe String }
-    }
+  { stringProp : String
+  , stringInput : String
+  , checkboxInput : Bool
+  , dropDownInput : String
+  , subDropdownInput : ( String, Maybe String )
+  }
 
 ```
 
 ### 2. Set the initial table state
-```elm-lang
+This example shows many column types so it is more complex. You can remove columns for simplicity.
+```elm
 
-import InputTable.Model exposing (Column, DisplayColumn, TextColumn, SubDropdownColumn)
+import InputTable.Model exposing (..)
 
 initialModel =
     { tableState : initialTableState
+    , unrelatedProperty : "xyz"
     }
 
-initialTableState : TableState MyRowDataType
-initialTableState =
-    { searchText = "" -- test in search input
-    , showVisibleColumnsUi = False -- whether to display column toggles
-    , sorting = NoSorting -- initial sorting (Asc/Desc columnId for sorting)
-    , externalFilter = (\r -> True) -- custom filter rows
-    , pageSize = Just 50 -- number of rows in a page, Nothing for no paging
-    , currentPage = 1 -- starting page
+tableState : TableState RowData
+tableState =
+    { searchText = ""
+    , showVisibleColumnsUi = False
+    , sorting = NoSorting
+    , externalFilter = (\r -> True)
+    , pageSize = Just 10
+    , currentPage = 1
     , columns = initialColumns
     , rows = initialRows
     }
 
-    initialColumns =
-    [ Column
-      1
-      "title"
-      True
-      (DisplayColumn {get:  .stringProp, filter : ""})
-    , Column 1 "program Code is now verrrry lonnggggggggg" True (TextColumn (TextColumnProps .programCode (\d v -> { d | programCode = v }) "" False))
-    , Column 8
-        "decision"
+
+initialColumns =
+    [ Column 1 "display column" True (DisplayColumn (DisplayColumnProps .stringProp ""))
+    , Column 4 "category" True (DropdownColumn (DropdownColumnProps .dropDownInput (\d v -> { d | dropDownInput = v }) "" [ "category 1", "category 2", "category 3" ]))
+    , Column 5
+        "subDropdownInput"
         True
         (SubDropdownColumn
             (SubDropdownColumnProps
-                .decision
-                (\d ( val, sub ) -> { d | decision = ( val, sub ) })
+                .subDropdownInput
+                (\d ( val, sub ) -> { d | subDropdownInput = ( val, sub ) })
                 ""
-                [ { parent = "Pending", childHeader = Nothing, children = [] }
-                , { parent = "Advance", childHeader = Just "To: ", children = [ "Rework", "Final" ] }
-                , { parent = "Accept", childHeader = Just "For: ", children = [ "Oral", "Poster", "Workshop" ] }
-                , { parent = "Withdraw", childHeader = Nothing, children = [] }
-                , { parent = "Reject", childHeader = Nothing, children = [] }
+                [ { parent = "parent 1", childHeader = Nothing, children = [ "child 1", "child 2" ] }
+                , { parent = "parent 2", childHeader = Nothing, children = [] }
+                , { parent = "parent 3", childHeader = Just "Choose one of: ", children = [ "child 1", "child 2", "child 3" ] }
                 ]
                 Nothing
                 Nothing
             )
         )
-    , Column 6 "notes" True (TextColumn (TextColumnProps .notes (\d v -> { d | notes = v }) "" True))
-    , Column 1 "C.O.I" True (CheckboxColumn (CheckboxColumnProps .conflictOfInterest (\d _ -> { d | conflictOfInterest = not d.conflictOfInterest }) Nothing))
-    , Column 7 "category" True (DropdownColumn (DropdownColumnProps .category (\d v -> { d | category = v }) "" [ "The Doors", "Nina Simone", "Curtis Reading" ]))
-    ]    
+    , Column 6 "text input column " True (TextColumn (TextColumnProps .stringInput (\d v -> { d | stringInput = v }) "" False))
+    , Column 7 "bool input column " True (CheckboxColumn (CheckboxColumnProps .checkboxInput (\d _ -> { d | checkboxInput = not d.checkboxInput }) Nothing))
+    ]
 
 
-type alias MyRowDataType =
-    { stringProp : String
-    , intProp : Int
-    , listProp : List String
+initialRows =
+    List.range 1 15
+        |> List.map makeRow
+
+
+makeRow id =
+    { id = id
+    , data =
+        { stringProp = "string prop " ++ (toString id)
+        , stringInput = "string input " ++ (toString id)
+        , checkboxInput = True
+        , dropDownInput = "category 1"
+        , subDropdownInput = ( "parent 1", Just "child 1" )
+        }
+    , checked = False
     }
+```
+
+### 3. Add the table Message as branch to your Main Message union type
+
+```elm
+import InputTable.Messages exposing (..)
+
+type Msg
+   = Table (TableMsg RowData)
+   | MyOtherMessage
+   | Etc
+```
+
+### 4. Add add a branch to your update that handles the TableMessages
+
+```elm
+import InputTable.Update
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        Table tableMsg ->
+            ( { model | tableState = InputTable.Update.update tableMsg model.tableState }, Cmd.none )
+        MyOtherMessage ->
+          ...
+```
+
+### 5. Add the table view somewhere in your view code
+```elm
+import InputTable.View
+
+div
+    []
+    [ (Html.map MainMessages.Table (InputTable.View.view model.tableState))
+    ]
 ```
