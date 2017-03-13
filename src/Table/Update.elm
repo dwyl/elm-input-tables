@@ -152,7 +152,7 @@ update msg tableState =
              }
             )
 
-        ToggleAllRowsCheckboxes visibleRows ->
+        ToggleVisibleRowsCheckboxes visibleRows ->
             let
                 allChecked =
                     List.all .checked visibleRows
@@ -169,7 +169,7 @@ update msg tableState =
                     if Set.member row.id visibleRowsIds then
                         { row | checked = not allChecked }
                     else
-                        { row | checked = False }
+                        row
             in
                 ({ tableState | rows = newRows })
 

@@ -14,9 +14,9 @@ all =
             \() ->
                 let
                     rows =
-                        [ TestUtils.makeRow 1 "test title 1" True ( "no children", Nothing )
-                        , TestUtils.makeRow 2 "test title 2" True ( "no children", Nothing )
-                        , TestUtils.makeRow 3 "test title 3" True ( "no children", Nothing )
+                        [ TestUtils.makeRow "test title 1" True ( "no children", Nothing ) 1
+                        , TestUtils.makeRow "test title 2" True ( "no children", Nothing ) 2
+                        , TestUtils.makeRow "test title 3" True ( "no children", Nothing ) 3
                         ]
 
                     columns =
@@ -25,16 +25,16 @@ all =
                         ]
 
                     expectedResult =
-                        [ TestUtils.makeRow 1 "test title 1" True ( "no children", Nothing ) ]
+                        [ TestUtils.makeRow "test title 1" True ( "no children", Nothing ) 1 ]
                 in
                     Expect.equal (RowFilter.run rows columns "" (\r -> True)) expectedResult
         , test "should filter rows that do not pass a boolean column filter" <|
             \() ->
                 let
                     rows =
-                        [ TestUtils.makeRow 1 "test title 1" True ( "no children", Nothing )
-                        , TestUtils.makeRow 2 "test title 2" True ( "no children", Nothing )
-                        , TestUtils.makeRow 3 "test title 3" False ( "no children", Nothing )
+                        [ TestUtils.makeRow "test title 1" True ( "no children", Nothing ) 1
+                        , TestUtils.makeRow "test title 2" True ( "no children", Nothing ) 2
+                        , TestUtils.makeRow "test title 3" False ( "no children", Nothing ) 3
                         ]
 
                     columns =
@@ -44,8 +44,8 @@ all =
                         ]
 
                     expectedResult =
-                        [ TestUtils.makeRow 1 "test title 1" True ( "no children", Nothing )
-                        , TestUtils.makeRow 2 "test title 2" True ( "no children", Nothing )
+                        [ TestUtils.makeRow "test title 1" True ( "no children", Nothing ) 1
+                        , TestUtils.makeRow "test title 2" True ( "no children", Nothing ) 2
                         ]
                 in
                     Expect.equal (RowFilter.run rows columns "" (\r -> True)) expectedResult
@@ -53,9 +53,9 @@ all =
             \() ->
                 let
                     rows =
-                        [ TestUtils.makeRow 1 "test title 1" True ( "no children", Nothing )
-                        , TestUtils.makeRow 2 "test title 2" True ( "no children", Nothing )
-                        , TestUtils.makeRow 3 "test title 3" True ( "no children", Nothing )
+                        [ TestUtils.makeRow "test title 1" True ( "no children", Nothing ) 1
+                        , TestUtils.makeRow "test title 2" True ( "no children", Nothing ) 2
+                        , TestUtils.makeRow "test title 3" True ( "no children", Nothing ) 3
                         ]
 
                     columns =
@@ -64,16 +64,16 @@ all =
                         ]
 
                     expectedResult =
-                        [ TestUtils.makeRow 3 "test title 3" True ( "no children", Nothing ) ]
+                        [ TestUtils.makeRow "test title 3" True ( "no children", Nothing ) 3 ]
                 in
                     Expect.equal (RowFilter.run rows columns "title 3" (\r -> True)) expectedResult
         , test "should filter rows that do not pass the search text and filter columns combined" <|
             \() ->
                 let
                     rows =
-                        [ TestUtils.makeRow 1 "test title a 1" True ( "no children", Nothing )
-                        , TestUtils.makeRow 2 "test title a 2" True ( "has children", Just "child 1" )
-                        , TestUtils.makeRow 3 "test title 3" True ( "has children", Just "child 1" )
+                        [ TestUtils.makeRow "test title a 1" True ( "no children", Nothing ) 1
+                        , TestUtils.makeRow "test title a 2" True ( "has children", Just "child 1" ) 2
+                        , TestUtils.makeRow "test title 3" True ( "has children", Just "child 1" ) 3
                         ]
 
                     columns =
@@ -82,7 +82,7 @@ all =
                         ]
 
                     expectedResult =
-                        [ TestUtils.makeRow 2 "test title a 2" True ( "has children", Just "child 1" ) ]
+                        [ TestUtils.makeRow "test title a 2" True ( "has children", Just "child 1" ) 2 ]
                 in
                     Expect.equal (RowFilter.run rows columns "ild 1" (\r -> True)) expectedResult
         ]

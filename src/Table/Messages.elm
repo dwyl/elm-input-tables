@@ -14,7 +14,7 @@ type TableMsg rowData
     | SetColumnFilterText Int String
     | SwitchColumnCheckboxFilter Int (Maybe Bool)
     | ToggleRowCheckbox Int
-    | ToggleAllRowsCheckboxes (List (Row rowData))
+    | ToggleVisibleRowsCheckboxes (List (Row rowData))
     | ToggleChooseVisibleColumnsUi
     | ToggleColumnVisibility Int
     | SortRows (Column rowData)

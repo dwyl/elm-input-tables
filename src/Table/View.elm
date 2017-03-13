@@ -133,7 +133,7 @@ checkboxHeader : TableState rowData -> List (Row rowData) -> Html (TableMsg rowD
 checkboxHeader model visibleRows =
     th []
         [ checkbox
-            (ToggleAllRowsCheckboxes visibleRows)
+            (ToggleVisibleRowsCheckboxes visibleRows)
             (List.all .checked visibleRows)
         ]
 
