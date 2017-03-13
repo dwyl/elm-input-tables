@@ -109,7 +109,7 @@ pre {
     padding: 0 1.75rem;
     border: 1px solid #979797;
     border-bottom: none;
-    font-family: 'Raleway';
+    font-family: 'Roboto', Helvetica, Ariel, sans-serif;
     cursor: pointer;
   }
 
@@ -227,7 +227,10 @@ pre {
         display: inline-block;
         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAgCAYAAAB+ZAqzAAAAAXNSR0IArs4c6QAAAVhJREFUWAnNkK8vRWEch49hNpsgCIoiSZIm+hNEURQEURRFURTF20RNkiRFUWyCzYYZnod7bcxx7jnvr/Nsn3vfe877/Xyf3aqqqgF571l0qpbJU4/EdNHpkwM++/Kv6fLNLKcbUlpOB11+sMmv0mI6/MkZT0vJubuWFd68kNxy7nT3vxzyNreYOxuZ48YtySXnLneOxRa3com5qxXn3E4t547WrDLxSlLJ2e2OThwxlUrM7s7MM3lHYsvZaXcQ20zHFrMzmAkaLkgsObvsjMIaLW8kVM4Ou6JyTFuomB3RWaDxnnSVc9aOJOzQ2lXM2WRM0nxJ2so542xS1mlvK+ZMFk7YMq6cd7OxyKYH0iTnHe9mZY9tTWLeyc40G69InZzvvFOEDbbWifmuKKds/y3ns+IsYfBIRnKefdYL9rEYiXnuDTOYXA/jOZip4Iavgme+doddnoP5AEOdX53zUZ1XAAAAAElFTkSuQmCC);
       }
-
+  .table-header__bool-filter{
+    font-size: 0.75rem;
+    cursor: pointer
+  }
 /* TABLE CELL */
 .table-cell {
   background-color: #F0F0F0;
@@ -303,6 +306,10 @@ pre {
         background-position: 95%;
       }
 
+      .table-cell--select-checkbox__label{
+        padding:0.5rem;
+        cursor:pointer;
+      }
 
       /*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 

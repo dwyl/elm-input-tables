@@ -95,8 +95,16 @@ viewPageControls { pageSize, currentPage } visibleRows =
             in
                 span []
                     [ span [] [ text (start ++ " - " ++ end ++ " of " ++ total) ]
-                    , span [ onClick PreviousPage ] [ text " Previous " ]
-                    , span [ onClick (NextPage (List.length visibleRows)) ] [ text " Next " ]
+                    , span
+                        [ style [ ( "cursor", "pointer" ) ]
+                        , onClick PreviousPage
+                        ]
+                        [ text " Previous " ]
+                    , span
+                        [ style [ ( "cursor", "pointer" ) ]
+                        , onClick (NextPage (List.length visibleRows))
+                        ]
+                        [ text " Next " ]
                     ]
 
 
@@ -132,9 +140,12 @@ viewHeaders model visibleRows =
 checkboxHeader : TableState rowData -> List (Row rowData) -> Html (TableMsg rowData)
 checkboxHeader model visibleRows =
     th []
-        [ checkbox
-            (ToggleVisibleRowsCheckboxes visibleRows)
-            (List.all .checked visibleRows)
+        [ label
+            [ class "table-cell--select-checkbox__label" ]
+            [ checkbox
+                (ToggleVisibleRowsCheckboxes visibleRows)
+                (List.all .checked visibleRows)
+            ]
         ]
 
 
@@ -175,7 +186,7 @@ viewHeader sorting column =
                 in
                     a
                         [ onClick (SwitchColumnCheckboxFilter column.id nextFilter)
-                        , style [ ( "cursor", "pointer" ) ]
+                        , class "table-header__bool-filter"
                         ]
                         [ text filterText ]
 
@@ -234,10 +245,9 @@ viewTableRow columns row =
 
 checkboxCell : Row rowData -> Html (TableMsg rowData)
 checkboxCell row =
-    td [ class "table-cell" ]
-        [ label []
+    td [ class "table-cell table-cell--select-checkbox" ]
+        [ label [ class "table-cell--select-checkbox__label" ]
             [ checkbox (ToggleRowCheckbox row.id) row.checked
-            , span [] [ text (toString row.id) ]
             ]
         ]
 
