@@ -1,13 +1,15 @@
 # Elm Input Table
 
 ## What is it?
-This is a  UI table that allows the user to input data into the table through text and (sub)dropdown inputs.
+This is a UI table that allows the user to input data into the table through text and (sub)dropdown inputs.
 It can be used when you want to allow the user to view and manipulate many pieces of data from the same view.
+
+To try it out, clone this repo and run `npm start` from the root directory.
 
 ## Installation
 
 ## Setup
-The are 5 steps to integrating this component into your app
+There are 5 steps to integrating this component into your app
 ### 1. Add the tableState as property on your model type and pass it a type that models the data on a row eg:
 ```elm
 
