@@ -1,3 +1,5 @@
+## Warning this module is in development and it's API is likely to change soon
+
 # Elm Input Table
 
 ## What is it?
